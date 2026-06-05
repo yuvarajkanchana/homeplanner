@@ -1,0 +1,1137 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R 41 0 R 43 0 R 45 0 R 47 0 R 49 0 R 51 0 R 53 0 R 55 0 R] /Count 25 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+6 0 obj
+<< /Length 3230 >>
+stream
+BT /F2 18 Tf 54.00 728.00 Td (HomePlanner Project Report) Tj ET
+BT /F2 14 Tf 54.00 682.00 Td (1. Executive Summary) Tj ET
+BT /F1 10.5 Tf 54.00 651.00 Td (HomePlanner is a full-stack web application for designing residential floor plans in a) Tj ET
+BT /F1 10.5 Tf 54.00 636.50 Td (browser. The application lets users register, sign in, create projects, draw 2D floor plans,) Tj ET
+BT /F1 10.5 Tf 54.00 622.00 Td (add architectural elements such as walls, doors, double doors, windows, gates, stairs,) Tj ET
+BT /F1 10.5 Tf 54.00 607.50 Td (furniture, and text labels, edit precise properties, and view the same plan in a live 3D) Tj ET
+BT /F1 10.5 Tf 54.00 593.00 Td (scene.) Tj ET
+BT /F1 10.5 Tf 54.00 570.50 Td (The project demonstrates practical full-stack engineering skills across frontend) Tj ET
+BT /F1 10.5 Tf 54.00 556.00 Td (development, backend API design, authentication, state management, canvas-based editing, 3D) Tj ET
+BT /F1 10.5 Tf 54.00 541.50 Td (visualization, persistence, UI/UX design, and deployment readiness.) Tj ET
+BT /F1 10.5 Tf 54.00 519.00 Td (From a job-search perspective, this is stronger than a basic CRUD app because it includes:) Tj ET
+BT /F1 10.5 Tf 68.00 496.50 Td (- Real interactive graphics.) Tj ET
+BT /F1 10.5 Tf 68.00 480.00 Td (- Persistent user-owned projects.) Tj ET
+BT /F1 10.5 Tf 68.00 463.50 Td (- Authentication and protected routes.) Tj ET
+BT /F1 10.5 Tf 68.00 447.00 Td (- Complex client-side state.) Tj ET
+BT /F1 10.5 Tf 68.00 430.50 Td (- 2D geometry and 3D rendering.) Tj ET
+BT /F1 10.5 Tf 68.00 414.00 Td (- Export, save, undo, redo, keyboard shortcuts, and property editing.) Tj ET
+BT /F1 10.5 Tf 68.00 397.50 Td (- A polished dashboard and authentication experience.) Tj ET
+BT /F1 10.5 Tf 68.00 381.00 Td (- Docker-based local development.) Tj ET
+BT /F1 10.5 Tf 54.00 358.50 Td (This project can be positioned as a portfolio-level product prototype for roles involving) Tj ET
+BT /F1 10.5 Tf 54.00 344.00 Td (frontend engineering, full-stack engineering, interactive web applications, SaaS tools, or) Tj ET
+BT /F1 10.5 Tf 54.00 329.50 Td (visualization-heavy applications.) Tj ET
+BT /F2 14 Tf 54.00 284.00 Td (2. Problem Statement) Tj ET
+BT /F1 10.5 Tf 54.00 253.00 Td (Many floor-planning tools are either too simple, too expensive, or require installation.) Tj ET
+BT /F1 10.5 Tf 54.00 238.50 Td (HomePlanner solves this by providing a browser-based planning tool where a user can:) Tj ET
+BT /F1 10.5 Tf 68.00 216.00 Td (1. Create an account.) Tj ET
+BT /F1 10.5 Tf 68.00 199.50 Td (2. Manage multiple design projects.) Tj ET
+BT /F1 10.5 Tf 68.00 183.00 Td (3. Draw a floor plan directly in 2D.) Tj ET
+BT /F1 10.5 Tf 68.00 166.50 Td (4. Add construction elements and furniture.) Tj ET
+BT /F1 10.5 Tf 68.00 150.00 Td (5. Edit exact properties.) Tj ET
+BT /F1 10.5 Tf 68.00 133.50 Td (6. View the result in 3D.) Tj ET
+BT /F1 10.5 Tf 68.00 117.00 Td (7. Save progress automatically.) Tj ET
+BT /F1 10.5 Tf 54.00 94.50 Td (The main technical challenge is that this is not only a form-based application. The editor) Tj ET
+BT /F1 10.5 Tf 54.00 80.00 Td (needs to behave like a design tool. It must handle drawing, snapping, dragging, resizing,) Tj ET
+BT /F1 8 Tf 558.00 28 Td (1) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 2494 >>
+stream
+BT /F1 10.5 Tf 54.00 738.00 Td (rotating, keyboard shortcuts, object selection, unit conversions, and live rendering.) Tj ET
+BT /F2 14 Tf 54.00 692.50 Td (3. What Has Been Built) Tj ET
+BT /F2 12 Tf 54.00 654.50 Td (3.1 Authentication) Tj ET
+BT /F1 10.5 Tf 54.00 627.50 Td (The app includes user authentication with:) Tj ET
+BT /F1 10.5 Tf 68.00 605.00 Td (- Register page.) Tj ET
+BT /F1 10.5 Tf 68.00 588.50 Td (- Login page.) Tj ET
+BT /F1 10.5 Tf 68.00 572.00 Td (- JWT-based authentication.) Tj ET
+BT /F1 10.5 Tf 68.00 555.50 Td (- Persisted auth state on the frontend.) Tj ET
+BT /F1 10.5 Tf 68.00 539.00 Td (- Protected editor/dashboard routes.) Tj ET
+BT /F1 10.5 Tf 68.00 522.50 Td (- Automatic logout handling when a token becomes invalid.) Tj ET
+BT /F1 10.5 Tf 54.00 500.00 Td (Relevant files:) Tj ET
+BT /F1 10.5 Tf 68.00 477.50 Td (- frontend/src/pages/LoginPage.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 461.00 Td (- frontend/src/pages/RegisterPage.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 444.50 Td (- frontend/src/store/useAuthStore.ts) Tj ET
+BT /F1 10.5 Tf 68.00 428.00 Td (- frontend/src/api/client.ts) Tj ET
+BT /F1 10.5 Tf 68.00 411.50 Td (- backend/app/api/v1/auth.py) Tj ET
+BT /F1 10.5 Tf 68.00 395.00 Td (- backend/app/core/security.py) Tj ET
+BT /F1 10.5 Tf 68.00 378.50 Td (- backend/app/models/user.py) Tj ET
+BT /F1 10.5 Tf 54.00 356.00 Td (Recent UI improvements:) Tj ET
+BT /F1 10.5 Tf 68.00 333.50 Td (- Added a high-quality architecture-themed background image.) Tj ET
+BT /F1 10.5 Tf 68.00 317.00 Td (- Converted login/register forms into polished glass-style cards.) Tj ET
+BT /F1 10.5 Tf 68.00 300.50 Td (- Centered the HomePlanner branding above the form.) Tj ET
+BT /F1 10.5 Tf 68.00 284.00 Td (- Added icon-enhanced form fields for email, username, and password.) Tj ET
+BT /F2 12 Tf 54.00 254.50 Td (3.2 Dashboard) Tj ET
+BT /F1 10.5 Tf 54.00 227.50 Td (The dashboard lets the user manage projects.) Tj ET
+BT /F1 10.5 Tf 54.00 205.00 Td (Implemented capabilities:) Tj ET
+BT /F1 10.5 Tf 68.00 182.50 Td (- View all projects owned by the logged-in user.) Tj ET
+BT /F1 10.5 Tf 68.00 166.00 Td (- Create a new project.) Tj ET
+BT /F1 10.5 Tf 68.00 149.50 Td (- Delete an existing project.) Tj ET
+BT /F1 10.5 Tf 68.00 133.00 Td (- Open projects.) Tj ET
+BT /F1 10.5 Tf 68.00 116.50 Td (- Double-click anywhere on a project card to open it.) Tj ET
+BT /F1 10.5 Tf 68.00 100.00 Td (- Show project metadata:) Tj ET
+BT /F1 10.5 Tf 68.00 83.50 Td (- project name) Tj ET
+BT /F1 8 Tf 558.00 28 Td (2) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 2466 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- description) Tj ET
+BT /F1 10.5 Tf 68.00 721.50 Td (- wall count) Tj ET
+BT /F1 10.5 Tf 68.00 705.00 Td (- object count) Tj ET
+BT /F1 10.5 Tf 68.00 688.50 Td (- updated date) Tj ET
+BT /F1 10.5 Tf 68.00 672.00 Td (- Aesthetic background image.) Tj ET
+BT /F1 10.5 Tf 68.00 655.50 Td (- Restyled project cards and buttons.) Tj ET
+BT /F1 10.5 Tf 54.00 633.00 Td (Relevant files:) Tj ET
+BT /F1 10.5 Tf 68.00 610.50 Td (- frontend/src/pages/DashboardPage.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 594.00 Td (- frontend/src/assets/dashboard-home-bg.png) Tj ET
+BT /F1 10.5 Tf 68.00 577.50 Td (- frontend/src/utils/projectThumbnails.ts) Tj ET
+BT /F1 10.5 Tf 68.00 561.00 Td (- backend/app/api/v1/projects.py) Tj ET
+BT /F1 10.5 Tf 54.00 538.50 Td (Important implementation note:) Tj ET
+BT /F1 10.5 Tf 54.00 516.00 Td (Project thumbnails are currently stored in browser localStorage after capturing the 2D) Tj ET
+BT /F1 10.5 Tf 54.00 501.50 Td (canvas during save or auto-save. This works for local use, but for production it should be) Tj ET
+BT /F1 10.5 Tf 54.00 487.00 Td (moved to backend storage so previews work across devices.) Tj ET
+BT /F2 12 Tf 54.00 457.50 Td (3.3 Project Management) Tj ET
+BT /F1 10.5 Tf 54.00 430.50 Td (Users can create, load, update, and delete projects. Each project stores a full floor plan.) Tj ET
+BT /F1 10.5 Tf 54.00 408.00 Td (The backend exposes endpoints for:) Tj ET
+BT /F1 10.5 Tf 68.00 385.50 Td (- create project) Tj ET
+BT /F1 10.5 Tf 68.00 369.00 Td (- list projects) Tj ET
+BT /F1 10.5 Tf 68.00 352.50 Td (- get project detail) Tj ET
+BT /F1 10.5 Tf 68.00 336.00 Td (- update project metadata) Tj ET
+BT /F1 10.5 Tf 68.00 319.50 Td (- save floor plan) Tj ET
+BT /F1 10.5 Tf 68.00 303.00 Td (- delete project) Tj ET
+BT /F1 10.5 Tf 54.00 280.50 Td (Relevant files:) Tj ET
+BT /F1 10.5 Tf 68.00 258.00 Td (- backend/app/api/v1/projects.py) Tj ET
+BT /F1 10.5 Tf 68.00 241.50 Td (- backend/app/models/project.py) Tj ET
+BT /F1 10.5 Tf 54.00 219.00 Td (The project data model includes:) Tj ET
+BT /F1 10.5 Tf 68.00 196.50 Td (- walls) Tj ET
+BT /F1 10.5 Tf 68.00 180.00 Td (- openings) Tj ET
+BT /F1 10.5 Tf 68.00 163.50 Td (- objects) Tj ET
+BT /F1 10.5 Tf 68.00 147.00 Td (- canvas size) Tj ET
+BT /F1 10.5 Tf 68.00 130.50 Td (- grid size) Tj ET
+BT /F2 12 Tf 54.00 101.00 Td (3.4 2D Floor Plan Editor) Tj ET
+BT /F1 10.5 Tf 54.00 74.00 Td (The 2D editor is the core user-facing feature.) Tj ET
+BT /F1 8 Tf 558.00 28 Td (3) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 2578 >>
+stream
+BT /F1 10.5 Tf 54.00 737.00 Td (Implemented editor capabilities:) Tj ET
+BT /F1 10.5 Tf 68.00 714.50 Td (- Draw walls.) Tj ET
+BT /F1 10.5 Tf 68.00 698.00 Td (- Snap walls to grid.) Tj ET
+BT /F1 10.5 Tf 68.00 681.50 Td (- Snap walls to nearby wall endpoints.) Tj ET
+BT /F1 10.5 Tf 68.00 665.00 Td (- Hold Shift for straight wall drawing.) Tj ET
+BT /F1 10.5 Tf 68.00 648.50 Td (- Select and edit walls.) Tj ET
+BT /F1 10.5 Tf 68.00 632.00 Td (- Drag wall endpoints.) Tj ET
+BT /F1 10.5 Tf 68.00 615.50 Td (- Move connected wall endpoints.) Tj ET
+BT /F1 10.5 Tf 68.00 599.00 Td (- Draw and place doors.) Tj ET
+BT /F1 10.5 Tf 68.00 582.50 Td (- Draw and place double doors.) Tj ET
+BT /F1 10.5 Tf 68.00 566.00 Td (- Add windows.) Tj ET
+BT /F1 10.5 Tf 68.00 549.50 Td (- Add gates.) Tj ET
+BT /F1 10.5 Tf 68.00 533.00 Td (- Add stairs.) Tj ET
+BT /F1 10.5 Tf 68.00 516.50 Td (- Add furniture.) Tj ET
+BT /F1 10.5 Tf 68.00 500.00 Td (- Add text labels.) Tj ET
+BT /F1 10.5 Tf 68.00 483.50 Td (- Pan and zoom the canvas.) Tj ET
+BT /F1 10.5 Tf 68.00 467.00 Td (- Scroll large floor plans.) Tj ET
+BT /F1 10.5 Tf 68.00 450.50 Td (- Delete selected elements.) Tj ET
+BT /F1 10.5 Tf 68.00 434.00 Td (- Edit text directly.) Tj ET
+BT /F1 10.5 Tf 68.00 417.50 Td (- Export the 2D plan image.) Tj ET
+BT /F1 10.5 Tf 68.00 401.00 Td (- Capture thumbnails for dashboard previews.) Tj ET
+BT /F1 10.5 Tf 54.00 378.50 Td (Relevant file:) Tj ET
+BT /F1 10.5 Tf 68.00 356.00 Td (- frontend/src/components/editor/Canvas2D.tsx) Tj ET
+BT /F2 12 Tf 54.00 326.50 Td (3.5 Door and Window Improvements) Tj ET
+BT /F1 10.5 Tf 54.00 299.50 Td (Several architectural element improvements were added:) Tj ET
+BT /F1 10.5 Tf 68.00 277.00 Td (- Combined door tools into a parent Door menu.) Tj ET
+BT /F1 10.5 Tf 68.00 260.50 Td (- Door menu reveals:) Tj ET
+BT /F1 10.5 Tf 68.00 244.00 Td (- Single Door) Tj ET
+BT /F1 10.5 Tf 68.00 227.50 Td (- Double Door) Tj ET
+BT /F1 10.5 Tf 68.00 211.00 Td (- Double Door remains its own placement mode.) Tj ET
+BT /F1 10.5 Tf 68.00 194.50 Td (- Window 2D color changed to black.) Tj ET
+BT /F1 10.5 Tf 68.00 178.00 Td (- Removed window length text from the 2D canvas.) Tj ET
+BT /F1 10.5 Tf 68.00 161.50 Td (- Door and window placement previews remain interactive.) Tj ET
+BT /F1 10.5 Tf 54.00 139.00 Td (Relevant files:) Tj ET
+BT /F1 10.5 Tf 68.00 116.50 Td (- frontend/src/components/layout/Toolbar.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 100.00 Td (- frontend/src/components/editor/Canvas2D.tsx) Tj ET
+BT /F2 12 Tf 54.00 70.50 Td (3.6 Furniture Sketch Mode) Tj ET
+BT /F1 8 Tf 558.00 28 Td (4) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 2418 >>
+stream
+BT /F1 10.5 Tf 54.00 737.00 Td (The 2D furniture rendering was changed from colored filled shapes to a basic black sketch) Tj ET
+BT /F1 10.5 Tf 54.00 722.50 Td (style.) Tj ET
+BT /F1 10.5 Tf 54.00 700.00 Td (Implemented changes:) Tj ET
+BT /F1 10.5 Tf 68.00 677.50 Td (- Furniture now appears as clean black-outline symbols.) Tj ET
+BT /F1 10.5 Tf 68.00 661.00 Td (- Removed furniture names from the 2D canvas.) Tj ET
+BT /F1 10.5 Tf 68.00 644.50 Td (- Kept text objects visible.) Tj ET
+BT /F1 10.5 Tf 68.00 628.00 Td (- Kept furniture selection, dragging, resizing, and rotation behavior.) Tj ET
+BT /F1 10.5 Tf 54.00 605.50 Td (This improves the 2D plan readability because the canvas now looks more like a technical) Tj ET
+BT /F1 10.5 Tf 54.00 591.00 Td (sketch instead of a decorative object layout.) Tj ET
+BT /F1 10.5 Tf 54.00 568.50 Td (Relevant file:) Tj ET
+BT /F1 10.5 Tf 68.00 546.00 Td (- frontend/src/components/editor/Canvas2D.tsx) Tj ET
+BT /F2 12 Tf 54.00 516.50 Td (3.7 Properties Panel) Tj ET
+BT /F1 10.5 Tf 54.00 489.50 Td (The right-side Properties panel allows exact editing of selected elements.) Tj ET
+BT /F1 10.5 Tf 54.00 467.00 Td (Wall properties include:) Tj ET
+BT /F1 10.5 Tf 68.00 444.50 Td (- start X) Tj ET
+BT /F1 10.5 Tf 68.00 428.00 Td (- start Y) Tj ET
+BT /F1 10.5 Tf 68.00 411.50 Td (- end X) Tj ET
+BT /F1 10.5 Tf 68.00 395.00 Td (- end Y) Tj ET
+BT /F1 10.5 Tf 68.00 378.50 Td (- editable length) Tj ET
+BT /F1 10.5 Tf 68.00 362.00 Td (- thickness) Tj ET
+BT /F1 10.5 Tf 68.00 345.50 Td (- height) Tj ET
+BT /F1 10.5 Tf 68.00 329.00 Td (- 3D wall color) Tj ET
+BT /F1 10.5 Tf 54.00 306.50 Td (Opening properties include:) Tj ET
+BT /F1 10.5 Tf 68.00 284.00 Td (- width) Tj ET
+BT /F1 10.5 Tf 68.00 267.50 Td (- position percentage) Tj ET
+BT /F1 10.5 Tf 68.00 251.00 Td (- door style) Tj ET
+BT /F1 10.5 Tf 68.00 234.50 Td (- height) Tj ET
+BT /F1 10.5 Tf 68.00 218.00 Td (- elevation) Tj ET
+BT /F1 10.5 Tf 68.00 201.50 Td (- trim) Tj ET
+BT /F1 10.5 Tf 68.00 185.00 Td (- swing angle) Tj ET
+BT /F1 10.5 Tf 68.00 168.50 Td (- rotation) Tj ET
+BT /F1 10.5 Tf 68.00 152.00 Td (- mount position) Tj ET
+BT /F1 10.5 Tf 68.00 135.50 Td (- swing side) Tj ET
+BT /F1 10.5 Tf 68.00 119.00 Td (- swing direction) Tj ET
+BT /F1 10.5 Tf 68.00 102.50 Td (- hardware style) Tj ET
+BT /F1 10.5 Tf 68.00 86.00 Td (- frame color) Tj ET
+BT /F1 10.5 Tf 68.00 69.50 Td (- panel color) Tj ET
+BT /F1 8 Tf 558.00 28 Td (5) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Length 2435 >>
+stream
+BT /F1 10.5 Tf 54.00 737.00 Td (Object properties include:) Tj ET
+BT /F1 10.5 Tf 68.00 714.50 Td (- X) Tj ET
+BT /F1 10.5 Tf 68.00 698.00 Td (- Y) Tj ET
+BT /F1 10.5 Tf 68.00 681.50 Td (- width) Tj ET
+BT /F1 10.5 Tf 68.00 665.00 Td (- depth/height) Tj ET
+BT /F1 10.5 Tf 68.00 648.50 Td (- rotation) Tj ET
+BT /F1 10.5 Tf 68.00 632.00 Td (- color) Tj ET
+BT /F1 10.5 Tf 68.00 615.50 Td (- label) Tj ET
+BT /F1 10.5 Tf 54.00 593.00 Td (Recent improvements:) Tj ET
+BT /F1 10.5 Tf 68.00 570.50 Td (- Wall height now correctly affects actual 3D wall height.) Tj ET
+BT /F1 10.5 Tf 68.00 554.00 Td (- Wall length is editable directly.) Tj ET
+BT /F1 10.5 Tf 68.00 537.50 Td (- Length input adapts to the selected unit:) Tj ET
+BT /F1 10.5 Tf 68.00 521.00 Td (- meters) Tj ET
+BT /F1 10.5 Tf 68.00 504.50 Td (- feet) Tj ET
+BT /F1 10.5 Tf 68.00 488.00 Td (- feet/inches notation) Tj ET
+BT /F1 10.5 Tf 68.00 471.50 Td (- Inches mode supports values like 5' 6".) Tj ET
+BT /F1 10.5 Tf 68.00 455.00 Td (- Added up/down chevrons for inch stepping.) Tj ET
+BT /F1 10.5 Tf 68.00 438.50 Td (- Replaced the properties panel toggle icon with left/right arrows.) Tj ET
+BT /F1 10.5 Tf 54.00 416.00 Td (Relevant file:) Tj ET
+BT /F1 10.5 Tf 68.00 393.50 Td (- frontend/src/components/layout/PropertiesPanel.tsx) Tj ET
+BT /F2 12 Tf 54.00 364.00 Td (3.8 Measurement Units) Tj ET
+BT /F1 10.5 Tf 54.00 337.00 Td (The application supports multiple length display modes:) Tj ET
+BT /F1 10.5 Tf 68.00 314.50 Td (- meters) Tj ET
+BT /F1 10.5 Tf 68.00 298.00 Td (- feet) Tj ET
+BT /F1 10.5 Tf 68.00 281.50 Td (- feet/inches) Tj ET
+BT /F1 10.5 Tf 54.00 259.00 Td (Implemented behavior:) Tj ET
+BT /F1 10.5 Tf 68.00 236.50 Td (- Wall length labels can display in the selected unit.) Tj ET
+BT /F1 10.5 Tf 68.00 220.00 Td (- The properties panel length field changes based on the selected unit.) Tj ET
+BT /F1 10.5 Tf 68.00 203.50 Td (- Feet/inches mode uses architectural notation such as 5' 6".) Tj ET
+BT /F1 10.5 Tf 54.00 181.00 Td (Relevant files:) Tj ET
+BT /F1 10.5 Tf 68.00 158.50 Td (- frontend/src/components/layout/EditorHeader.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 142.00 Td (- frontend/src/components/layout/PropertiesPanel.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 125.50 Td (- frontend/src/components/editor/Canvas2D.tsx) Tj ET
+BT /F2 12 Tf 54.00 96.00 Td (3.9 Undo and Redo) Tj ET
+BT /F1 10.5 Tf 54.00 69.00 Td (The app supports editing history:) Tj ET
+BT /F1 8 Tf 558.00 28 Td (6) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 16 0 R >>
+endobj
+18 0 obj
+<< /Length 2314 >>
+stream
+BT /F1 10.5 Tf 68.00 737.00 Td (- Undo with Ctrl+Z.) Tj ET
+BT /F1 10.5 Tf 68.00 720.50 Td (- Redo with Ctrl+Y.) Tj ET
+BT /F1 10.5 Tf 68.00 704.00 Td (- Undo and redo buttons in the toolbar.) Tj ET
+BT /F1 10.5 Tf 68.00 687.50 Td (- History snapshots stored in Zustand.) Tj ET
+BT /F1 10.5 Tf 54.00 665.00 Td (Relevant files:) Tj ET
+BT /F1 10.5 Tf 68.00 642.50 Td (- frontend/src/store/useFloorPlanStore.ts) Tj ET
+BT /F1 10.5 Tf 68.00 626.00 Td (- frontend/src/components/editor/Canvas2D.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 609.50 Td (- frontend/src/components/layout/Toolbar.tsx) Tj ET
+BT /F2 12 Tf 54.00 580.00 Td (3.10 File Menu) Tj ET
+BT /F1 10.5 Tf 54.00 553.00 Td (A File menu was added near the Dashboard button.) Tj ET
+BT /F1 10.5 Tf 54.00 530.50 Td (Menu actions include:) Tj ET
+BT /F1 10.5 Tf 68.00 508.00 Td (- New project) Tj ET
+BT /F1 10.5 Tf 68.00 491.50 Td (- Open folder) Tj ET
+BT /F1 10.5 Tf 68.00 475.00 Td (- Save) Tj ET
+BT /F1 10.5 Tf 68.00 458.50 Td (- Save as) Tj ET
+BT /F1 10.5 Tf 68.00 442.00 Td (- Export image) Tj ET
+BT /F1 10.5 Tf 68.00 425.50 Td (- Print) Tj ET
+BT /F1 10.5 Tf 68.00 409.00 Td (- Record 3D video) Tj ET
+BT /F1 10.5 Tf 54.00 386.50 Td (Keyboard shortcuts were added for file-style actions:) Tj ET
+BT /F1 10.5 Tf 68.00 364.00 Td (- Ctrl+N) Tj ET
+BT /F1 10.5 Tf 68.00 347.50 Td (- Ctrl+S) Tj ET
+BT /F1 10.5 Tf 68.00 331.00 Td (- Ctrl+Shift+S) Tj ET
+BT /F1 10.5 Tf 68.00 314.50 Td (- Ctrl+P) Tj ET
+BT /F1 10.5 Tf 54.00 292.00 Td (Relevant file:) Tj ET
+BT /F1 10.5 Tf 68.00 269.50 Td (- frontend/src/components/layout/EditorHeader.tsx) Tj ET
+BT /F2 12 Tf 54.00 240.00 Td (3.11 3D Viewer) Tj ET
+BT /F1 10.5 Tf 54.00 213.00 Td (The 3D viewer renders the floor plan in a 3D scene.) Tj ET
+BT /F1 10.5 Tf 54.00 190.50 Td (Implemented 3D capabilities:) Tj ET
+BT /F1 10.5 Tf 68.00 168.00 Td (- Walls rendered as 3D geometry.) Tj ET
+BT /F1 10.5 Tf 68.00 151.50 Td (- Wall height from properties affects 3D height.) Tj ET
+BT /F1 10.5 Tf 68.00 135.00 Td (- Door frames and door leaves.) Tj ET
+BT /F1 10.5 Tf 68.00 118.50 Td (- Double door rendering.) Tj ET
+BT /F1 10.5 Tf 68.00 102.00 Td (- Gate rendering.) Tj ET
+BT /F1 10.5 Tf 68.00 85.50 Td (- Window frame rendering.) Tj ET
+BT /F1 10.5 Tf 68.00 69.00 Td (- Furniture rendered as basic 3D objects.) Tj ET
+BT /F1 8 Tf 558.00 28 Td (7) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 18 0 R >>
+endobj
+20 0 obj
+<< /Length 2090 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- Wood floor texture.) Tj ET
+BT /F1 10.5 Tf 68.00 721.50 Td (- Orbit controls.) Tj ET
+BT /F1 10.5 Tf 68.00 705.00 Td (- Zoom controls.) Tj ET
+BT /F1 10.5 Tf 68.00 688.50 Td (- Pan controls.) Tj ET
+BT /F1 10.5 Tf 68.00 672.00 Td (- Split view support.) Tj ET
+BT /F1 10.5 Tf 68.00 655.50 Td (- 3D video recording support.) Tj ET
+BT /F1 10.5 Tf 54.00 633.00 Td (Relevant file:) Tj ET
+BT /F1 10.5 Tf 68.00 610.50 Td (- frontend/src/components/viewer3d/Viewer3D.tsx) Tj ET
+BT /F2 12 Tf 54.00 581.00 Td (3.12 Save, Auto-Save, Export, and Print) Tj ET
+BT /F1 10.5 Tf 54.00 554.00 Td (The project supports persistence and output workflows.) Tj ET
+BT /F1 10.5 Tf 54.00 531.50 Td (Implemented:) Tj ET
+BT /F1 10.5 Tf 68.00 509.00 Td (- Manual save.) Tj ET
+BT /F1 10.5 Tf 68.00 492.50 Td (- Debounced auto-save.) Tj ET
+BT /F1 10.5 Tf 68.00 476.00 Td (- Save as PDF.) Tj ET
+BT /F1 10.5 Tf 68.00 459.50 Td (- Save as Word document.) Tj ET
+BT /F1 10.5 Tf 68.00 443.00 Td (- Save as image.) Tj ET
+BT /F1 10.5 Tf 68.00 426.50 Td (- Print plan.) Tj ET
+BT /F1 10.5 Tf 68.00 410.00 Td (- 2D canvas export.) Tj ET
+BT /F1 10.5 Tf 68.00 393.50 Td (- 3D video recording.) Tj ET
+BT /F1 10.5 Tf 68.00 377.00 Td (- Dashboard thumbnail capture.) Tj ET
+BT /F1 10.5 Tf 54.00 354.50 Td (Relevant files:) Tj ET
+BT /F1 10.5 Tf 68.00 332.00 Td (- frontend/src/components/layout/EditorHeader.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 315.50 Td (- frontend/src/hooks/useAutoSave.ts) Tj ET
+BT /F1 10.5 Tf 68.00 299.00 Td (- frontend/src/components/editor/Canvas2D.tsx) Tj ET
+BT /F1 10.5 Tf 68.00 282.50 Td (- frontend/src/utils/projectThumbnails.ts) Tj ET
+BT /F2 14 Tf 54.00 237.00 Td (4. Technology Stack) Tj ET
+BT /F2 12 Tf 54.00 199.00 Td (4.1 Frontend) Tj ET
+BT /F1 10.5 Tf 54.00 172.00 Td (The frontend uses:) Tj ET
+BT /F1 10.5 Tf 68.00 149.50 Td (- React 18) Tj ET
+BT /F1 10.5 Tf 68.00 133.00 Td (- TypeScript) Tj ET
+BT /F1 10.5 Tf 68.00 116.50 Td (- Vite) Tj ET
+BT /F1 10.5 Tf 68.00 100.00 Td (- Tailwind CSS) Tj ET
+BT /F1 10.5 Tf 68.00 83.50 Td (- Zustand) Tj ET
+BT /F1 8 Tf 558.00 28 Td (8) Tj ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 20 0 R >>
+endobj
+22 0 obj
+<< /Length 2520 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- Axios) Tj ET
+BT /F1 10.5 Tf 68.00 721.50 Td (- Konva / React Konva) Tj ET
+BT /F1 10.5 Tf 68.00 705.00 Td (- Three.js) Tj ET
+BT /F1 10.5 Tf 68.00 688.50 Td (- React Three Fiber) Tj ET
+BT /F1 10.5 Tf 68.00 672.00 Td (- Drei) Tj ET
+BT /F1 10.5 Tf 68.00 655.50 Td (- Lucide React icons) Tj ET
+BT /F1 10.5 Tf 54.00 633.00 Td (Why these choices matter:) Tj ET
+BT /F1 10.5 Tf 68.00 610.50 Td (- React provides component-driven UI.) Tj ET
+BT /F1 10.5 Tf 68.00 594.00 Td (- TypeScript improves safety in complex state and geometry logic.) Tj ET
+BT /F1 10.5 Tf 68.00 577.50 Td (- Vite gives fast development and simple production builds.) Tj ET
+BT /F1 10.5 Tf 68.00 561.00 Td (- Zustand keeps editor state simple without Redux boilerplate.) Tj ET
+BT /F1 10.5 Tf 68.00 544.50 Td (- Konva is appropriate for 2D canvas editing.) Tj ET
+BT /F1 10.5 Tf 68.00 528.00 Td (- Three.js and React Three Fiber are appropriate for browser 3D visualization.) Tj ET
+BT /F1 10.5 Tf 68.00 511.50 Td (- Axios centralizes API calls and token handling.) Tj ET
+BT /F2 12 Tf 54.00 482.00 Td (4.2 Backend) Tj ET
+BT /F1 10.5 Tf 54.00 455.00 Td (The backend uses:) Tj ET
+BT /F1 10.5 Tf 68.00 432.50 Td (- FastAPI) Tj ET
+BT /F1 10.5 Tf 68.00 416.00 Td (- Python 3.11) Tj ET
+BT /F1 10.5 Tf 68.00 399.50 Td (- MongoDB) Tj ET
+BT /F1 10.5 Tf 68.00 383.00 Td (- Beanie ODM) Tj ET
+BT /F1 10.5 Tf 68.00 366.50 Td (- Pydantic models) Tj ET
+BT /F1 10.5 Tf 68.00 350.00 Td (- JWT authentication) Tj ET
+BT /F1 10.5 Tf 68.00 333.50 Td (- Password hashing) Tj ET
+BT /F1 10.5 Tf 54.00 311.00 Td (Why these choices matter:) Tj ET
+BT /F1 10.5 Tf 68.00 288.50 Td (- FastAPI is well-suited for typed REST APIs.) Tj ET
+BT /F1 10.5 Tf 68.00 272.00 Td (- Pydantic gives schema validation.) Tj ET
+BT /F1 10.5 Tf 68.00 255.50 Td (- MongoDB fits nested floor-plan documents.) Tj ET
+BT /F1 10.5 Tf 68.00 239.00 Td (- Beanie provides document modeling on top of MongoDB.) Tj ET
+BT /F1 10.5 Tf 68.00 222.50 Td (- JWT allows stateless authentication.) Tj ET
+BT /F2 12 Tf 54.00 193.00 Td (4.3 Infrastructure) Tj ET
+BT /F1 10.5 Tf 54.00 166.00 Td (The project includes Docker support:) Tj ET
+BT /F1 10.5 Tf 68.00 143.50 Td (- docker-compose.yml) Tj ET
+BT /F1 10.5 Tf 68.00 127.00 Td (- backend Dockerfile) Tj ET
+BT /F1 10.5 Tf 68.00 110.50 Td (- frontend Dockerfile) Tj ET
+BT /F1 10.5 Tf 68.00 94.00 Td (- MongoDB service) Tj ET
+BT /F1 10.5 Tf 54.00 71.50 Td (For local development, the app can be started with:) Tj ET
+BT /F1 8 Tf 558.00 28 Td (9) Tj ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 22 0 R >>
+endobj
+24 0 obj
+<< /Length 2121 >>
+stream
+BT /F1 10.5 Tf 54.00 737.00 Td (``bash) Tj ET
+BT /F1 10.5 Tf 54.00 720.50 Td (docker-compose up --build) Tj ET
+BT /F1 10.5 Tf 54.00 704.00 Td (`) Tj ET
+BT /F2 14 Tf 54.00 658.50 Td (5. Architecture) Tj ET
+BT /F2 12 Tf 54.00 620.50 Td (5.1 High-Level Architecture) Tj ET
+BT /F1 10.5 Tf 54.00 593.50 Td (The architecture is:) Tj ET
+BT /F1 10.5 Tf 54.00 571.00 Td (`text) Tj ET
+BT /F1 10.5 Tf 54.00 554.50 Td (Browser) Tj ET
+BT /F3 8.5 Tf 54.00 538.00 Td () Tj ET
+BT /F3 8.5 Tf 54.00 523.50 Td (React frontend) Tj ET
+BT /F3 8.5 Tf 54.00 509.00 Td (- Dashboard) Tj ET
+BT /F3 8.5 Tf 54.00 494.50 Td (- 2D editor) Tj ET
+BT /F3 8.5 Tf 54.00 480.00 Td (- 3D viewer) Tj ET
+BT /F3 8.5 Tf 54.00 465.50 Td (- Auth pages) Tj ET
+BT /F3 8.5 Tf 54.00 451.00 Td () Tj ET
+BT /F1 10.5 Tf 54.00 436.50 Td (v) Tj ET
+BT /F1 10.5 Tf 54.00 420.00 Td (FastAPI backend) Tj ET
+BT /F3 8.5 Tf 54.00 403.50 Td () Tj ET
+BT /F3 8.5 Tf 54.00 389.00 Td (REST API) Tj ET
+BT /F3 8.5 Tf 54.00 374.50 Td (JWT auth) Tj ET
+BT /F3 8.5 Tf 54.00 360.00 Td (Project persistence) Tj ET
+BT /F3 8.5 Tf 54.00 345.50 Td () Tj ET
+BT /F1 10.5 Tf 54.00 331.00 Td (v) Tj ET
+BT /F1 10.5 Tf 54.00 314.50 Td (MongoDB database) Tj ET
+BT /F1 10.5 Tf 54.00 298.00 Td (`) Tj ET
+BT /F2 12 Tf 54.00 268.50 Td (5.2 Frontend Architecture) Tj ET
+BT /F1 10.5 Tf 54.00 241.50 Td (The frontend separates concerns as follows:) Tj ET
+BT /F1 10.5 Tf 68.00 219.00 Td (- pages/: route-level screens.) Tj ET
+BT /F1 10.5 Tf 68.00 202.50 Td (- components/editor/: 2D canvas editor.) Tj ET
+BT /F1 10.5 Tf 68.00 186.00 Td (- components/viewer3d/: 3D scene.) Tj ET
+BT /F1 10.5 Tf 68.00 169.50 Td (- components/layout/: toolbar, header, status bar, properties panel.) Tj ET
+BT /F1 10.5 Tf 68.00 153.00 Td (- store/: Zustand state stores.) Tj ET
+BT /F1 10.5 Tf 68.00 136.50 Td (- api/: API client and error handling.) Tj ET
+BT /F1 10.5 Tf 68.00 120.00 Td (- types/: shared TypeScript schema definitions.) Tj ET
+BT /F1 10.5 Tf 68.00 103.50 Td (- utils/: reusable utilities such as thumbnail capture.) Tj ET
+BT /F2 12 Tf 54.00 74.00 Td (5.3 Backend Architecture) Tj ET
+BT /F1 8 Tf 558.00 28 Td (10) Tj ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 24 0 R >>
+endobj
+26 0 obj
+<< /Length 2500 >>
+stream
+BT /F1 10.5 Tf 54.00 737.00 Td (The backend separates concerns as follows:) Tj ET
+BT /F1 10.5 Tf 68.00 714.50 Td (- api/v1/: route handlers.) Tj ET
+BT /F1 10.5 Tf 68.00 698.00 Td (- models/: database and request/response schemas.) Tj ET
+BT /F1 10.5 Tf 68.00 681.50 Td (- core/: config, database connection, security.) Tj ET
+BT /F1 10.5 Tf 68.00 665.00 Td (- main.py: app creation, middleware, router registration.) Tj ET
+BT /F2 12 Tf 54.00 635.50 Td (5.4 Data Flow) Tj ET
+BT /F1 10.5 Tf 54.00 608.50 Td (Typical project workflow:) Tj ET
+BT /F1 10.5 Tf 68.00 586.00 Td (1. User logs in.) Tj ET
+BT /F1 10.5 Tf 68.00 569.50 Td (2. Frontend stores JWT.) Tj ET
+BT /F1 10.5 Tf 68.00 553.00 Td (3. User opens dashboard.) Tj ET
+BT /F1 10.5 Tf 68.00 536.50 Td (4. Frontend requests project list.) Tj ET
+BT /F1 10.5 Tf 68.00 520.00 Td (5. User opens a project.) Tj ET
+BT /F1 10.5 Tf 68.00 503.50 Td (6. Frontend loads full floor plan.) Tj ET
+BT /F1 10.5 Tf 68.00 487.00 Td (7. Zustand hydrates editor state.) Tj ET
+BT /F1 10.5 Tf 68.00 470.50 Td (8. User edits the floor plan.) Tj ET
+BT /F1 10.5 Tf 68.00 454.00 Td (9. Zustand updates local state.) Tj ET
+BT /F1 10.5 Tf 68.00 437.50 Td (10. Auto-save sends floor plan to backend.) Tj ET
+BT /F1 10.5 Tf 68.00 421.00 Td (11. Backend validates and stores the floor plan in MongoDB.) Tj ET
+BT /F1 10.5 Tf 68.00 404.50 Td (12. 2D and 3D views update from the same state.) Tj ET
+BT /F2 14 Tf 54.00 359.00 Td (6. Implementation Details) Tj ET
+BT /F2 12 Tf 54.00 321.00 Td (6.1 Authentication Implementation) Tj ET
+BT /F1 10.5 Tf 54.00 294.00 Td (The backend handles registration and login. Passwords are hashed before storage. Login) Tj ET
+BT /F1 10.5 Tf 54.00 279.50 Td (returns a JWT access token. The frontend stores the token and sends it with API requests.) Tj ET
+BT /F1 10.5 Tf 54.00 257.00 Td (Frontend API behavior:) Tj ET
+BT /F1 10.5 Tf 68.00 234.50 Td (- Axios attaches the token to outgoing requests.) Tj ET
+BT /F1 10.5 Tf 68.00 218.00 Td (- If an API call returns 401, token data is removed and the user is redirected to login.) Tj ET
+BT /F1 10.5 Tf 54.00 195.50 Td (This demonstrates:) Tj ET
+BT /F1 10.5 Tf 68.00 173.00 Td (- Authentication flow.) Tj ET
+BT /F1 10.5 Tf 68.00 156.50 Td (- Token-based API security.) Tj ET
+BT /F1 10.5 Tf 68.00 140.00 Td (- Protected frontend routes.) Tj ET
+BT /F1 10.5 Tf 68.00 123.50 Td (- Basic session persistence.) Tj ET
+BT /F2 12 Tf 54.00 94.00 Td (6.2 Floor Plan Data Model) Tj ET
+BT /F1 8 Tf 558.00 28 Td (11) Tj ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 26 0 R >>
+endobj
+28 0 obj
+<< /Length 2228 >>
+stream
+BT /F1 10.5 Tf 54.00 738.00 Td (A floor plan is stored as a nested document:) Tj ET
+BT /F1 10.5 Tf 54.00 715.50 Td (`text) Tj ET
+BT /F1 10.5 Tf 54.00 699.00 Td (FloorPlan) Tj ET
+BT /F1 10.5 Tf 54.00 682.50 Td (walls[]) Tj ET
+BT /F1 10.5 Tf 54.00 666.00 Td (openings[]) Tj ET
+BT /F1 10.5 Tf 54.00 649.50 Td (objects[]) Tj ET
+BT /F1 10.5 Tf 54.00 633.00 Td (canvas_width) Tj ET
+BT /F1 10.5 Tf 54.00 616.50 Td (canvas_height) Tj ET
+BT /F1 10.5 Tf 54.00 600.00 Td (grid_size) Tj ET
+BT /F1 10.5 Tf 54.00 583.50 Td (`) Tj ET
+BT /F1 10.5 Tf 54.00 561.00 Td (Each wall has:) Tj ET
+BT /F1 10.5 Tf 68.00 538.50 Td (- start point) Tj ET
+BT /F1 10.5 Tf 68.00 522.00 Td (- end point) Tj ET
+BT /F1 10.5 Tf 68.00 505.50 Td (- thickness) Tj ET
+BT /F1 10.5 Tf 68.00 489.00 Td (- height) Tj ET
+BT /F1 10.5 Tf 68.00 472.50 Td (- optional color) Tj ET
+BT /F1 10.5 Tf 54.00 450.00 Td (Each opening has:) Tj ET
+BT /F1 10.5 Tf 68.00 427.50 Td (- wall reference) Tj ET
+BT /F1 10.5 Tf 68.00 411.00 Td (- type) Tj ET
+BT /F1 10.5 Tf 68.00 394.50 Td (- offset along wall) Tj ET
+BT /F1 10.5 Tf 68.00 378.00 Td (- width) Tj ET
+BT /F1 10.5 Tf 68.00 361.50 Td (- swing information) Tj ET
+BT /F1 10.5 Tf 68.00 345.00 Td (- 3D styling properties) Tj ET
+BT /F1 10.5 Tf 54.00 322.50 Td (Each object has:) Tj ET
+BT /F1 10.5 Tf 68.00 300.00 Td (- type) Tj ET
+BT /F1 10.5 Tf 68.00 283.50 Td (- label) Tj ET
+BT /F1 10.5 Tf 68.00 267.00 Td (- position) Tj ET
+BT /F1 10.5 Tf 68.00 250.50 Td (- width) Tj ET
+BT /F1 10.5 Tf 68.00 234.00 Td (- height) Tj ET
+BT /F1 10.5 Tf 68.00 217.50 Td (- rotation) Tj ET
+BT /F1 10.5 Tf 68.00 201.00 Td (- color) Tj ET
+BT /F1 10.5 Tf 54.00 178.50 Td (This model is suitable for MongoDB because the floor plan is naturally document-shaped. A) Tj ET
+BT /F1 10.5 Tf 54.00 164.00 Td (project owns a complete floor plan, and saving the entire floor plan as one document is) Tj ET
+BT /F1 10.5 Tf 54.00 149.50 Td (simple and practical for this app stage.) Tj ET
+BT /F2 12 Tf 54.00 120.00 Td (6.3 2D Editor Implementation) Tj ET
+BT /F1 10.5 Tf 54.00 93.00 Td (The 2D editor is built with React Konva. The main canvas state comes from Zustand.) Tj ET
+BT /F1 10.5 Tf 54.00 70.50 Td (Core editor concepts:) Tj ET
+BT /F1 8 Tf 558.00 28 Td (12) Tj ET
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 28 0 R >>
+endobj
+30 0 obj
+<< /Length 2958 >>
+stream
+BT /F1 10.5 Tf 68.00 737.00 Td (- Canvas coordinates are stored in pixels.) Tj ET
+BT /F1 10.5 Tf 68.00 720.50 Td (- Walls are line segments.) Tj ET
+BT /F1 10.5 Tf 68.00 704.00 Td (- Openings are attached to a wall by wall_id and an offset.) Tj ET
+BT /F1 10.5 Tf 68.00 687.50 Td (- Furniture objects are positioned using center coordinates.) Tj ET
+BT /F1 10.5 Tf 68.00 671.00 Td (- Snapping is applied during placement.) Tj ET
+BT /F1 10.5 Tf 68.00 654.50 Td (- Selection controls determine what appears in the Properties panel.) Tj ET
+BT /F1 10.5 Tf 54.00 632.00 Td (Important interaction logic:) Tj ET
+BT /F1 10.5 Tf 68.00 609.50 Td (- Mouse down starts wall drawing or placement.) Tj ET
+BT /F1 10.5 Tf 68.00 593.00 Td (- Mouse move updates previews.) Tj ET
+BT /F1 10.5 Tf 68.00 576.50 Td (- Double-click ends wall drawing.) Tj ET
+BT /F1 10.5 Tf 68.00 560.00 Td (- Dragging updates objects and wall endpoints.) Tj ET
+BT /F1 10.5 Tf 68.00 543.50 Td (- Keyboard events switch tools and trigger undo/redo.) Tj ET
+BT /F1 10.5 Tf 68.00 527.00 Td (- Export events generate canvas images.) Tj ET
+BT /F1 10.5 Tf 54.00 504.50 Td (This is one of the most technically valuable parts of the project because it shows custom) Tj ET
+BT /F1 10.5 Tf 54.00 490.00 Td (interaction programming beyond standard forms and tables.) Tj ET
+BT /F2 12 Tf 54.00 460.50 Td (6.4 Snapping and Geometry) Tj ET
+BT /F1 10.5 Tf 54.00 433.50 Td (The editor includes geometry helpers for:) Tj ET
+BT /F1 10.5 Tf 68.00 411.00 Td (- snapping to grid) Tj ET
+BT /F1 10.5 Tf 68.00 394.50 Td (- snapping to wall endpoints) Tj ET
+BT /F1 10.5 Tf 68.00 378.00 Td (- projecting points onto walls) Tj ET
+BT /F1 10.5 Tf 68.00 361.50 Td (- finding closest wall) Tj ET
+BT /F1 10.5 Tf 68.00 345.00 Td (- computing wall length) Tj ET
+BT /F1 10.5 Tf 68.00 328.50 Td (- computing wall angle) Tj ET
+BT /F1 10.5 Tf 68.00 312.00 Td (- positioning openings along walls) Tj ET
+BT /F1 10.5 Tf 54.00 289.50 Td (These functions are needed because the editor is spatial. User actions must map from pointer) Tj ET
+BT /F1 10.5 Tf 54.00 275.00 Td (coordinates to floor-plan geometry.) Tj ET
+BT /F1 10.5 Tf 54.00 252.50 Td (This demonstrates practical math in UI development.) Tj ET
+BT /F2 12 Tf 54.00 223.00 Td (6.5 3D Viewer Implementation) Tj ET
+BT /F1 10.5 Tf 54.00 196.00 Td (The 3D viewer uses Three.js through React Three Fiber.) Tj ET
+BT /F1 10.5 Tf 54.00 173.50 Td (The app converts 2D floor-plan data into 3D objects:) Tj ET
+BT /F1 10.5 Tf 68.00 151.00 Td (- wall line segments become 3D boxes) Tj ET
+BT /F1 10.5 Tf 68.00 134.50 Td (- wall thickness becomes box depth) Tj ET
+BT /F1 10.5 Tf 68.00 118.00 Td (- wall height becomes box height) Tj ET
+BT /F1 10.5 Tf 68.00 101.50 Td (- wall position maps into the 3D X/Z plane) Tj ET
+BT /F1 10.5 Tf 68.00 85.00 Td (- openings create wall gaps) Tj ET
+BT /F1 10.5 Tf 68.00 68.50 Td (- doors/windows/gates get additional 3D geometry) Tj ET
+BT /F1 8 Tf 558.00 28 Td (13) Tj ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 30 0 R >>
+endobj
+32 0 obj
+<< /Length 2311 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- furniture gets simplified 3D object forms) Tj ET
+BT /F1 10.5 Tf 54.00 715.50 Td (The conversion uses a scale:) Tj ET
+BT /F1 10.5 Tf 54.00 693.00 Td (`text) Tj ET
+BT /F1 10.5 Tf 54.00 676.50 Td (50px = 1 meter) Tj ET
+BT /F1 10.5 Tf 54.00 660.00 Td (`) Tj ET
+BT /F1 10.5 Tf 54.00 637.50 Td (This allows the same stored 2D data to drive both the 2D editor and 3D scene.) Tj ET
+BT /F2 12 Tf 54.00 608.00 Td (6.6 State Management) Tj ET
+BT /F1 10.5 Tf 54.00 581.00 Td (Zustand stores:) Tj ET
+BT /F1 10.5 Tf 68.00 558.50 Td (- walls) Tj ET
+BT /F1 10.5 Tf 68.00 542.00 Td (- openings) Tj ET
+BT /F1 10.5 Tf 68.00 525.50 Td (- objects) Tj ET
+BT /F1 10.5 Tf 68.00 509.00 Td (- selected element) Tj ET
+BT /F1 10.5 Tf 68.00 492.50 Td (- active tool) Tj ET
+BT /F1 10.5 Tf 68.00 476.00 Td (- measurement unit) Tj ET
+BT /F1 10.5 Tf 68.00 459.50 Td (- wall measurement mode) Tj ET
+BT /F1 10.5 Tf 68.00 443.00 Td (- dirty state) Tj ET
+BT /F1 10.5 Tf 68.00 426.50 Td (- undo/redo history) Tj ET
+BT /F1 10.5 Tf 54.00 404.00 Td (This is appropriate because editor state is shared by many components:) Tj ET
+BT /F1 10.5 Tf 68.00 381.50 Td (- Canvas2D) Tj ET
+BT /F1 10.5 Tf 68.00 365.00 Td (- Viewer3D) Tj ET
+BT /F1 10.5 Tf 68.00 348.50 Td (- PropertiesPanel) Tj ET
+BT /F1 10.5 Tf 68.00 332.00 Td (- Toolbar) Tj ET
+BT /F1 10.5 Tf 68.00 315.50 Td (- StatusBar) Tj ET
+BT /F1 10.5 Tf 68.00 299.00 Td (- EditorHeader) Tj ET
+BT /F1 10.5 Tf 54.00 276.50 Td (Using a central store avoids excessive prop drilling.) Tj ET
+BT /F2 12 Tf 54.00 247.00 Td (6.7 Undo/Redo Implementation) Tj ET
+BT /F1 10.5 Tf 54.00 220.00 Td (Undo/redo is implemented by storing snapshots of the floor plan.) Tj ET
+BT /F1 10.5 Tf 54.00 197.50 Td (When a significant edit starts, the app pushes a snapshot. Undo restores a previous) Tj ET
+BT /F1 10.5 Tf 54.00 183.00 Td (snapshot. Redo reapplies a future snapshot.) Tj ET
+BT /F1 10.5 Tf 54.00 160.50 Td (This approach is simple and appropriate for a project of this size. For very large plans, a) Tj ET
+BT /F1 10.5 Tf 54.00 146.00 Td (future improvement would be command-based history instead of full snapshots.) Tj ET
+BT /F2 12 Tf 54.00 116.50 Td (6.8 Auto-Save Implementation) Tj ET
+BT /F1 10.5 Tf 54.00 89.50 Td (Auto-save is debounced.) Tj ET
+BT /F1 8 Tf 558.00 28 Td (14) Tj ET
+endstream
+endobj
+33 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 32 0 R >>
+endobj
+34 0 obj
+<< /Length 2310 >>
+stream
+BT /F1 10.5 Tf 54.00 738.00 Td (Behavior:) Tj ET
+BT /F1 10.5 Tf 68.00 715.50 Td (1. User edits the plan.) Tj ET
+BT /F1 10.5 Tf 68.00 699.00 Td (2. Store marks state as dirty.) Tj ET
+BT /F1 10.5 Tf 68.00 682.50 Td (3. useAutoSave waits briefly.) Tj ET
+BT /F1 10.5 Tf 68.00 666.00 Td (4. If the user stops editing, the floor plan is sent to backend.) Tj ET
+BT /F1 10.5 Tf 68.00 649.50 Td (5. On success, state is marked clean.) Tj ET
+BT /F1 10.5 Tf 54.00 627.00 Td (This prevents saving on every tiny movement while still keeping user work safe.) Tj ET
+BT /F2 12 Tf 54.00 597.50 Td (6.9 Dashboard Thumbnail Implementation) Tj ET
+BT /F1 10.5 Tf 54.00 570.50 Td (The app captures a 2D canvas image and stores it in localStorage as a project thumbnail.) Tj ET
+BT /F1 10.5 Tf 54.00 548.00 Td (Current behavior:) Tj ET
+BT /F1 10.5 Tf 68.00 525.50 Td (- Capture happens during save/auto-save.) Tj ET
+BT /F1 10.5 Tf 68.00 509.00 Td (- Dashboard reads thumbnails from localStorage.) Tj ET
+BT /F1 10.5 Tf 68.00 492.50 Td (- If no thumbnail exists, a fallback preview is shown.) Tj ET
+BT /F1 10.5 Tf 54.00 470.00 Td (Limitation:) Tj ET
+BT /F1 10.5 Tf 68.00 447.50 Td (- localStorage thumbnails are device-specific.) Tj ET
+BT /F1 10.5 Tf 54.00 425.00 Td (Production improvement:) Tj ET
+BT /F1 10.5 Tf 68.00 402.50 Td (- Store thumbnail on backend as part of the project model, or upload it to object) Tj ET
+BT /F1 10.5 Tf 68.00 388.00 Td (storage.) Tj ET
+BT /F2 12 Tf 54.00 358.50 Td (6.10 File Export Implementation) Tj ET
+BT /F1 10.5 Tf 54.00 331.50 Td (The app supports exporting the plan as:) Tj ET
+BT /F1 10.5 Tf 68.00 309.00 Td (- image) Tj ET
+BT /F1 10.5 Tf 68.00 292.50 Td (- PDF) Tj ET
+BT /F1 10.5 Tf 68.00 276.00 Td (- Word document) Tj ET
+BT /F1 10.5 Tf 54.00 253.50 Td (It captures the 2D canvas, converts it into image data, and wraps it into the selected) Tj ET
+BT /F1 10.5 Tf 54.00 239.00 Td (output format.) Tj ET
+BT /F1 10.5 Tf 54.00 216.50 Td (This demonstrates:) Tj ET
+BT /F1 10.5 Tf 68.00 194.00 Td (- browser canvas export) Tj ET
+BT /F1 10.5 Tf 68.00 177.50 Td (- Blob handling) Tj ET
+BT /F1 10.5 Tf 68.00 161.00 Td (- file download flow) Tj ET
+BT /F1 10.5 Tf 68.00 144.50 Td (- print workflow) Tj ET
+BT /F2 14 Tf 54.00 99.00 Td (7. Design and UX Improvements) Tj ET
+BT /F1 8 Tf 558.00 28 Td (15) Tj ET
+endstream
+endobj
+35 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 34 0 R >>
+endobj
+36 0 obj
+<< /Length 2677 >>
+stream
+BT /F1 10.5 Tf 54.00 738.00 Td (Several UI improvements were made to move the app from functional prototype toward a) Tj ET
+BT /F1 10.5 Tf 54.00 723.50 Td (polished product:) Tj ET
+BT /F1 10.5 Tf 68.00 701.00 Td (- Aesthetic dashboard background.) Tj ET
+BT /F1 10.5 Tf 68.00 684.50 Td (- Aesthetic login/register background.) Tj ET
+BT /F1 10.5 Tf 68.00 668.00 Td (- Better auth form card.) Tj ET
+BT /F1 10.5 Tf 68.00 651.50 Td (- Centered auth branding.) Tj ET
+BT /F1 10.5 Tf 68.00 635.00 Td (- File menu with familiar actions.) Tj ET
+BT /F1 10.5 Tf 68.00 618.50 Td (- Collapsible properties panel with arrow icon.) Tj ET
+BT /F1 10.5 Tf 68.00 602.00 Td (- Door submenu with Single Door and Double Door.) Tj ET
+BT /F1 10.5 Tf 68.00 585.50 Td (- Cleaner project cards.) Tj ET
+BT /F1 10.5 Tf 68.00 569.00 Td (- Double-click project opening.) Tj ET
+BT /F1 10.5 Tf 68.00 552.50 Td (- More subtle dashboard action buttons.) Tj ET
+BT /F1 10.5 Tf 68.00 536.00 Td (- Black sketch-style 2D furniture.) Tj ET
+BT /F1 10.5 Tf 68.00 519.50 Td (- Removed visual clutter such as furniture labels and window length text.) Tj ET
+BT /F1 10.5 Tf 54.00 497.00 Td (These changes matter because employers will evaluate not only whether the app works, but) Tj ET
+BT /F1 10.5 Tf 54.00 482.50 Td (also whether it feels usable and professionally considered.) Tj ET
+BT /F2 14 Tf 54.00 437.00 Td (8. What You Gained From This Project) Tj ET
+BT /F2 12 Tf 54.00 399.00 Td (8.1 Frontend Engineering Skills) Tj ET
+BT /F1 10.5 Tf 54.00 372.00 Td (You gained experience with:) Tj ET
+BT /F1 10.5 Tf 68.00 349.50 Td (- React component architecture.) Tj ET
+BT /F1 10.5 Tf 68.00 333.00 Td (- TypeScript types and interfaces.) Tj ET
+BT /F1 10.5 Tf 68.00 316.50 Td (- Complex state management with Zustand.) Tj ET
+BT /F1 10.5 Tf 68.00 300.00 Td (- Canvas-based interaction using Konva.) Tj ET
+BT /F1 10.5 Tf 68.00 283.50 Td (- Keyboard shortcuts.) Tj ET
+BT /F1 10.5 Tf 68.00 267.00 Td (- Form handling.) Tj ET
+BT /F1 10.5 Tf 68.00 250.50 Td (- Responsive UI layouts.) Tj ET
+BT /F1 10.5 Tf 68.00 234.00 Td (- Styling with Tailwind CSS.) Tj ET
+BT /F1 10.5 Tf 68.00 217.50 Td (- UI refinement and product polish.) Tj ET
+BT /F1 10.5 Tf 68.00 201.00 Td (- File export and browser APIs.) Tj ET
+BT /F1 10.5 Tf 68.00 184.50 Td (- Image assets and visual design.) Tj ET
+BT /F2 12 Tf 54.00 155.00 Td (8.2 Backend Engineering Skills) Tj ET
+BT /F1 10.5 Tf 54.00 128.00 Td (You gained experience with:) Tj ET
+BT /F1 10.5 Tf 68.00 105.50 Td (- FastAPI route design.) Tj ET
+BT /F1 10.5 Tf 68.00 89.00 Td (- Pydantic models.) Tj ET
+BT /F1 10.5 Tf 68.00 72.50 Td (- MongoDB document modeling.) Tj ET
+BT /F1 8 Tf 558.00 28 Td (16) Tj ET
+endstream
+endobj
+37 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 36 0 R >>
+endobj
+38 0 obj
+<< /Length 2474 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- Beanie ODM.) Tj ET
+BT /F1 10.5 Tf 68.00 721.50 Td (- JWT authentication.) Tj ET
+BT /F1 10.5 Tf 68.00 705.00 Td (- Password hashing.) Tj ET
+BT /F1 10.5 Tf 68.00 688.50 Td (- Environment-based configuration.) Tj ET
+BT /F1 10.5 Tf 68.00 672.00 Td (- REST API design.) Tj ET
+BT /F1 10.5 Tf 68.00 655.50 Td (- Dockerized development.) Tj ET
+BT /F2 12 Tf 54.00 626.00 Td (8.3 Full-Stack Skills) Tj ET
+BT /F1 10.5 Tf 54.00 599.00 Td (You gained experience connecting frontend and backend:) Tj ET
+BT /F1 10.5 Tf 68.00 576.50 Td (- Axios API client.) Tj ET
+BT /F1 10.5 Tf 68.00 560.00 Td (- Token injection into requests.) Tj ET
+BT /F1 10.5 Tf 68.00 543.50 Td (- Protected routes.) Tj ET
+BT /F1 10.5 Tf 68.00 527.00 Td (- Persisted user sessions.) Tj ET
+BT /F1 10.5 Tf 68.00 510.50 Td (- Project CRUD.) Tj ET
+BT /F1 10.5 Tf 68.00 494.00 Td (- Auto-save to backend.) Tj ET
+BT /F1 10.5 Tf 68.00 477.50 Td (- Data model shared across frontend and backend.) Tj ET
+BT /F2 12 Tf 54.00 448.00 Td (8.4 Product Engineering Skills) Tj ET
+BT /F1 10.5 Tf 54.00 421.00 Td (You gained experience thinking like a product engineer:) Tj ET
+BT /F1 10.5 Tf 68.00 398.50 Td (- Improving usability.) Tj ET
+BT /F1 10.5 Tf 68.00 382.00 Td (- Reducing visual clutter.) Tj ET
+BT /F1 10.5 Tf 68.00 365.50 Td (- Adding shortcuts.) Tj ET
+BT /F1 10.5 Tf 68.00 349.00 Td (- Supporting undo/redo.) Tj ET
+BT /F1 10.5 Tf 68.00 332.50 Td (- Handling save/export workflows.) Tj ET
+BT /F1 10.5 Tf 68.00 316.00 Td (- Making dashboard/project management feel practical.) Tj ET
+BT /F1 10.5 Tf 68.00 299.50 Td (- Balancing technical function with user experience.) Tj ET
+BT /F2 12 Tf 54.00 270.00 Td (8.5 Graphics and Visualization Skills) Tj ET
+BT /F1 10.5 Tf 54.00 243.00 Td (This project gives you practical experience with:) Tj ET
+BT /F1 10.5 Tf 68.00 220.50 Td (- 2D geometry.) Tj ET
+BT /F1 10.5 Tf 68.00 204.00 Td (- Canvas rendering.) Tj ET
+BT /F1 10.5 Tf 68.00 187.50 Td (- Drag/drop behavior.) Tj ET
+BT /F1 10.5 Tf 68.00 171.00 Td (- Snapping.) Tj ET
+BT /F1 10.5 Tf 68.00 154.50 Td (- Spatial data models.) Tj ET
+BT /F1 10.5 Tf 68.00 138.00 Td (- Converting 2D data into 3D representations.) Tj ET
+BT /F1 10.5 Tf 68.00 121.50 Td (- Camera/orbit controls.) Tj ET
+BT /F1 10.5 Tf 68.00 105.00 Td (- 3D scene composition.) Tj ET
+BT /F1 10.5 Tf 54.00 82.50 Td (This is valuable because many web developers only build CRUD dashboards. This app) Tj ET
+BT /F1 8 Tf 558.00 28 Td (17) Tj ET
+endstream
+endobj
+39 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 38 0 R >>
+endobj
+40 0 obj
+<< /Length 3068 >>
+stream
+BT /F1 10.5 Tf 54.00 738.00 Td (demonstrates more advanced interactive UI work.) Tj ET
+BT /F2 14 Tf 54.00 692.50 Td (9. How To Use This Project In Job Search) Tj ET
+BT /F2 12 Tf 54.00 654.50 Td (9.1 Portfolio Positioning) Tj ET
+BT /F1 10.5 Tf 54.00 627.50 Td (You can present HomePlanner as:) Tj ET
+BT /F1 10.5 Tf 54.00 605.00 Td (> A full-stack browser-based floor planning application with authenticated project) Tj ET
+BT /F1 10.5 Tf 54.00 590.50 Td (management, a custom 2D canvas editor, real-time 3D visualization, auto-save, export tools,) Tj ET
+BT /F1 10.5 Tf 54.00 576.00 Td (and project dashboard.) Tj ET
+BT /F1 10.5 Tf 54.00 553.50 Td (This positioning shows:) Tj ET
+BT /F1 10.5 Tf 68.00 531.00 Td (- full-stack capability) Tj ET
+BT /F1 10.5 Tf 68.00 514.50 Td (- frontend depth) Tj ET
+BT /F1 10.5 Tf 68.00 498.00 Td (- graphics/interactions) Tj ET
+BT /F1 10.5 Tf 68.00 481.50 Td (- product thinking) Tj ET
+BT /F1 10.5 Tf 68.00 465.00 Td (- real-world architecture) Tj ET
+BT /F2 12 Tf 54.00 435.50 Td (9.2 Resume Bullet Points) Tj ET
+BT /F1 10.5 Tf 54.00 408.50 Td (Use resume bullets like these:) Tj ET
+BT /F1 10.5 Tf 68.00 386.00 Td (- Built a full-stack home floor-planning application using React, TypeScript, FastAPI,) Tj ET
+BT /F1 10.5 Tf 68.00 371.50 Td (MongoDB, and Three.js.) Tj ET
+BT /F1 10.5 Tf 68.00 355.00 Td (- Implemented a custom 2D canvas editor with wall drawing, snapping, selection, dragging,) Tj ET
+BT /F1 10.5 Tf 68.00 340.50 Td (resizing, doors, windows, stairs, furniture, and text annotations.) Tj ET
+BT /F1 10.5 Tf 68.00 324.00 Td (- Developed real-time 3D visualization by converting 2D floor-plan geometry into Three.js) Tj ET
+BT /F1 10.5 Tf 68.00 309.50 Td (wall, opening, floor, and furniture objects.) Tj ET
+BT /F1 10.5 Tf 68.00 293.00 Td (- Added authenticated project management with JWT login, protected routes, MongoDB) Tj ET
+BT /F1 10.5 Tf 68.00 278.50 Td (persistence, project CRUD, and debounced auto-save.) Tj ET
+BT /F1 10.5 Tf 68.00 262.00 Td (- Designed an interactive properties inspector for precise editing of wall dimensions,) Tj ET
+BT /F1 10.5 Tf 68.00 247.50 Td (height, thickness, openings, furniture, and measurement units.) Tj ET
+BT /F1 10.5 Tf 68.00 231.00 Td (- Implemented undo/redo history, keyboard shortcuts, project thumbnails, file export,) Tj ET
+BT /F1 10.5 Tf 68.00 216.50 Td (print, and save-as workflows.) Tj ET
+BT /F1 10.5 Tf 68.00 200.00 Td (- Improved UI/UX with polished dashboard, login/register pages, icon-based menus,) Tj ET
+BT /F1 10.5 Tf 68.00 185.50 Td (sketch-style 2D rendering, and responsive editor layouts.) Tj ET
+BT /F1 10.5 Tf 68.00 169.00 Td (- Dockerized the application for local development with separate frontend, backend, and) Tj ET
+BT /F1 10.5 Tf 68.00 154.50 Td (MongoDB services.) Tj ET
+BT /F2 12 Tf 54.00 125.00 Td (9.3 LinkedIn Project Description) Tj ET
+BT /F1 10.5 Tf 54.00 98.00 Td (Use this:) Tj ET
+BT /F1 10.5 Tf 54.00 75.50 Td (> HomePlanner is a full-stack floor-planning web application that allows users to create,) Tj ET
+BT /F1 8 Tf 558.00 28 Td (18) Tj ET
+endstream
+endobj
+41 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 40 0 R >>
+endobj
+42 0 obj
+<< /Length 3631 >>
+stream
+BT /F1 10.5 Tf 54.00 738.00 Td (edit, save, and visualize home layouts directly in the browser. I built a custom 2D editor) Tj ET
+BT /F1 10.5 Tf 54.00 723.50 Td (with React Konva, implemented real-time 3D visualization with Three.js/React Three Fiber,) Tj ET
+BT /F1 10.5 Tf 54.00 709.00 Td (and developed a FastAPI + MongoDB backend with JWT authentication and project persistence.) Tj ET
+BT /F1 10.5 Tf 54.00 694.50 Td (The app supports wall drawing, snapping, doors, windows, furniture, stairs, undo/redo,) Tj ET
+BT /F1 10.5 Tf 54.00 680.00 Td (measurement units, auto-save, project dashboard management, export, print, and polished) Tj ET
+BT /F1 10.5 Tf 54.00 665.50 Td (authentication screens.) Tj ET
+BT /F2 12 Tf 54.00 636.00 Td (9.4 GitHub README Pitch) Tj ET
+BT /F1 10.5 Tf 54.00 609.00 Td (Add a short pitch near the top of the README:) Tj ET
+BT /F1 10.5 Tf 54.00 586.50 Td (> HomePlanner is a browser-based home design tool built as a full-stack interactive web) Tj ET
+BT /F1 10.5 Tf 54.00 572.00 Td (application. It combines a custom 2D canvas editor with real-time 3D rendering,) Tj ET
+BT /F1 10.5 Tf 54.00 557.50 Td (authenticated project persistence, export workflows, and a polished SaaS-style dashboard.) Tj ET
+BT /F2 12 Tf 54.00 528.00 Td (9.5 Interview Explanation) Tj ET
+BT /F1 10.5 Tf 54.00 501.00 Td (When an interviewer asks, "Tell me about this project," use this structure:) Tj ET
+BT /F1 10.5 Tf 68.00 478.50 Td (1. Problem: I wanted to build a browser-based floor planning tool.) Tj ET
+BT /F1 10.5 Tf 68.00 462.00 Td (2. Stack: React, TypeScript, Konva, Three.js, FastAPI, MongoDB.) Tj ET
+BT /F1 10.5 Tf 68.00 445.50 Td (3. Frontend challenge: Building a custom editor with drawing, snapping, dragging, and) Tj ET
+BT /F1 10.5 Tf 68.00 431.00 Td (keyboard shortcuts.) Tj ET
+BT /F1 10.5 Tf 68.00 414.50 Td (4. Backend challenge: Persisting nested floor-plan documents per user with) Tj ET
+BT /F1 10.5 Tf 68.00 400.00 Td (authentication.) Tj ET
+BT /F1 10.5 Tf 68.00 383.50 Td (5. 3D challenge: Mapping 2D geometry into a live 3D scene.) Tj ET
+BT /F1 10.5 Tf 68.00 367.00 Td (6. Product work: Added dashboard, auto-save, export, undo/redo, file menu, and polished) Tj ET
+BT /F1 10.5 Tf 68.00 352.50 Td (UI.) Tj ET
+BT /F1 10.5 Tf 68.00 336.00 Td (7. What I learned: Spatial UI, state management, 3D rendering, full-stack architecture,) Tj ET
+BT /F1 10.5 Tf 68.00 321.50 Td (product polish.) Tj ET
+BT /F1 10.5 Tf 54.00 299.00 Td (Example answer:) Tj ET
+BT /F1 10.5 Tf 54.00 276.50 Td (> I built HomePlanner as a full-stack floor-planning app. The frontend is React and) Tj ET
+BT /F1 10.5 Tf 54.00 262.00 Td (TypeScript, with Konva for the 2D editor and React Three Fiber for 3D visualization. The) Tj ET
+BT /F1 10.5 Tf 54.00 247.50 Td (backend is FastAPI with MongoDB and JWT authentication. The hardest part was designing the) Tj ET
+BT /F1 10.5 Tf 54.00 233.00 Td (editor state and geometry model so the same wall, opening, and furniture data could drive) Tj ET
+BT /F1 10.5 Tf 54.00 218.50 Td (both the 2D canvas and the 3D scene. I also implemented snapping, undo/redo, properties) Tj ET
+BT /F1 10.5 Tf 54.00 204.00 Td (editing, auto-save, export, and project management. This project helped me move beyond CRUD) Tj ET
+BT /F1 10.5 Tf 54.00 189.50 Td (apps and work with interactive graphics, spatial data, and real product workflows.) Tj ET
+BT /F2 14 Tf 54.00 144.00 Td (10. Technical Talking Points For Interviews) Tj ET
+BT /F2 12 Tf 54.00 106.00 Td (10.1 Why MongoDB?) Tj ET
+BT /F1 10.5 Tf 54.00 79.00 Td (MongoDB works well because a floor plan is naturally nested:) Tj ET
+BT /F1 8 Tf 558.00 28 Td (19) Tj ET
+endstream
+endobj
+43 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 42 0 R >>
+endobj
+44 0 obj
+<< /Length 2587 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- a project has walls) Tj ET
+BT /F1 10.5 Tf 68.00 721.50 Td (- a project has openings) Tj ET
+BT /F1 10.5 Tf 68.00 705.00 Td (- a project has objects) Tj ET
+BT /F1 10.5 Tf 68.00 688.50 Td (- all are saved together) Tj ET
+BT /F1 10.5 Tf 54.00 666.00 Td (This avoids needing many relational joins for the MVP.) Tj ET
+BT /F2 12 Tf 54.00 636.50 Td (10.2 Why Zustand?) Tj ET
+BT /F1 10.5 Tf 54.00 609.50 Td (Zustand is lightweight and works well for editor state. The editor needs shared access to) Tj ET
+BT /F1 10.5 Tf 54.00 595.00 Td (walls, openings, objects, active tool, selected item, undo history, and dirty state. Zustand) Tj ET
+BT /F1 10.5 Tf 54.00 580.50 Td (handles that without large Redux boilerplate.) Tj ET
+BT /F2 12 Tf 54.00 551.00 Td (10.3 Why Konva?) Tj ET
+BT /F1 10.5 Tf 54.00 524.00 Td (Konva provides a React-friendly canvas abstraction for interactive 2D graphics. It supports) Tj ET
+BT /F1 10.5 Tf 54.00 509.50 Td (shapes, drag events, layers, groups, and pointer interactions, which are important for a) Tj ET
+BT /F1 10.5 Tf 54.00 495.00 Td (design editor.) Tj ET
+BT /F2 12 Tf 54.00 465.50 Td (10.4 Why Three.js?) Tj ET
+BT /F1 10.5 Tf 54.00 438.50 Td (Three.js is the standard browser 3D library. React Three Fiber makes it easier to write 3D) Tj ET
+BT /F1 10.5 Tf 54.00 424.00 Td (scenes using React components.) Tj ET
+BT /F2 12 Tf 54.00 394.50 Td (10.5 What Was The Hardest Part?) Tj ET
+BT /F1 10.5 Tf 54.00 367.50 Td (The hardest part was keeping the floor-plan data model consistent while supporting multiple) Tj ET
+BT /F1 10.5 Tf 54.00 353.00 Td (views and interactions:) Tj ET
+BT /F1 10.5 Tf 68.00 330.50 Td (- 2D editing) Tj ET
+BT /F1 10.5 Tf 68.00 314.00 Td (- 3D rendering) Tj ET
+BT /F1 10.5 Tf 68.00 297.50 Td (- properties panel) Tj ET
+BT /F1 10.5 Tf 68.00 281.00 Td (- auto-save) Tj ET
+BT /F1 10.5 Tf 68.00 264.50 Td (- undo/redo) Tj ET
+BT /F1 10.5 Tf 68.00 248.00 Td (- export) Tj ET
+BT /F1 10.5 Tf 54.00 225.50 Td (The same data has to stay valid across all those features.) Tj ET
+BT /F2 12 Tf 54.00 196.00 Td (10.6 How Would You Improve It?) Tj ET
+BT /F1 10.5 Tf 54.00 169.00 Td (Strong future improvements:) Tj ET
+BT /F1 10.5 Tf 68.00 146.50 Td (- Store project thumbnails on backend instead of localStorage.) Tj ET
+BT /F1 10.5 Tf 68.00 130.00 Td (- Add collaborative editing.) Tj ET
+BT /F1 10.5 Tf 68.00 113.50 Td (- Add sharing links.) Tj ET
+BT /F1 10.5 Tf 68.00 97.00 Td (- Add custom furniture library.) Tj ET
+BT /F1 10.5 Tf 68.00 80.50 Td (- Add more realistic 3D materials.) Tj ET
+BT /F1 8 Tf 558.00 28 Td (20) Tj ET
+endstream
+endobj
+45 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 44 0 R >>
+endobj
+46 0 obj
+<< /Length 2076 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- Add roof/ceiling controls.) Tj ET
+BT /F1 10.5 Tf 68.00 721.50 Td (- Add room detection and area calculation.) Tj ET
+BT /F1 10.5 Tf 68.00 705.00 Td (- Add tests for geometry helpers.) Tj ET
+BT /F1 10.5 Tf 68.00 688.50 Td (- Add production-grade CORS configuration.) Tj ET
+BT /F1 10.5 Tf 68.00 672.00 Td (- Add cloud deployment pipeline.) Tj ET
+BT /F1 10.5 Tf 68.00 655.50 Td (- Add project version history.) Tj ET
+BT /F2 14 Tf 54.00 610.00 Td (11. Deployment Plan) Tj ET
+BT /F1 10.5 Tf 54.00 579.00 Td (The recommended deployment architecture is:) Tj ET
+BT /F1 10.5 Tf 54.00 556.50 Td (`text) Tj ET
+BT /F1 10.5 Tf 54.00 540.00 Td (Frontend: Vercel or Netlify) Tj ET
+BT /F1 10.5 Tf 54.00 523.50 Td (Backend: Render, Railway, or Fly.io) Tj ET
+BT /F1 10.5 Tf 54.00 507.00 Td (Database: MongoDB Atlas) Tj ET
+BT /F1 10.5 Tf 54.00 490.50 Td (`) Tj ET
+BT /F2 12 Tf 54.00 461.00 Td (11.1 Database) Tj ET
+BT /F1 10.5 Tf 54.00 434.00 Td (Use MongoDB Atlas.) Tj ET
+BT /F1 10.5 Tf 54.00 411.50 Td (Set:) Tj ET
+BT /F1 10.5 Tf 54.00 389.00 Td (`env) Tj ET
+BT /F1 10.5 Tf 54.00 372.50 Td (MONGO_URL=mongodb+srv://...) Tj ET
+BT /F1 10.5 Tf 54.00 356.00 Td (DB_NAME=homeplanner) Tj ET
+BT /F1 10.5 Tf 54.00 339.50 Td (`) Tj ET
+BT /F2 12 Tf 54.00 310.00 Td (11.2 Backend) Tj ET
+BT /F1 10.5 Tf 54.00 283.00 Td (Host FastAPI on Render or Railway.) Tj ET
+BT /F1 10.5 Tf 54.00 260.50 Td (Production start command:) Tj ET
+BT /F1 10.5 Tf 54.00 238.00 Td (`bash) Tj ET
+BT /F1 10.5 Tf 54.00 221.50 Td (uvicorn app.main:app --host 0.0.0.0 --port $PORT) Tj ET
+BT /F1 10.5 Tf 54.00 205.00 Td (`) Tj ET
+BT /F1 10.5 Tf 54.00 182.50 Td (Environment variables:) Tj ET
+BT /F1 10.5 Tf 54.00 160.00 Td (`env) Tj ET
+BT /F1 10.5 Tf 54.00 143.50 Td (MONGO_URL=your_mongodb_atlas_url) Tj ET
+BT /F1 10.5 Tf 54.00 127.00 Td (DB_NAME=homeplanner) Tj ET
+BT /F1 10.5 Tf 54.00 110.50 Td (SECRET_KEY=your_long_random_secret) Tj ET
+BT /F1 10.5 Tf 54.00 94.00 Td (ALGORITHM=HS256) Tj ET
+BT /F1 10.5 Tf 54.00 77.50 Td (ACCESS_TOKEN_EXPIRE_MINUTES=1440) Tj ET
+BT /F1 8 Tf 558.00 28 Td (21) Tj ET
+endstream
+endobj
+47 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 46 0 R >>
+endobj
+48 0 obj
+<< /Length 2193 >>
+stream
+BT /F1 10.5 Tf 54.00 738.00 Td (`) Tj ET
+BT /F2 12 Tf 54.00 708.50 Td (11.3 Frontend) Tj ET
+BT /F1 10.5 Tf 54.00 681.50 Td (Host Vite frontend on Vercel or Netlify.) Tj ET
+BT /F1 10.5 Tf 54.00 659.00 Td (Build command:) Tj ET
+BT /F1 10.5 Tf 54.00 636.50 Td (`bash) Tj ET
+BT /F1 10.5 Tf 54.00 620.00 Td (npm run build) Tj ET
+BT /F1 10.5 Tf 54.00 603.50 Td (`) Tj ET
+BT /F1 10.5 Tf 54.00 581.00 Td (Output directory:) Tj ET
+BT /F1 10.5 Tf 54.00 558.50 Td (`text) Tj ET
+BT /F1 10.5 Tf 54.00 542.00 Td (dist) Tj ET
+BT /F1 10.5 Tf 54.00 525.50 Td (`) Tj ET
+BT /F1 10.5 Tf 54.00 503.00 Td (Frontend environment variable:) Tj ET
+BT /F1 10.5 Tf 54.00 480.50 Td (`env) Tj ET
+BT /F1 10.5 Tf 54.00 464.00 Td (VITE_API_URL=https://your-backend-url.com) Tj ET
+BT /F1 10.5 Tf 54.00 447.50 Td (`) Tj ET
+BT /F2 12 Tf 54.00 418.00 Td (11.4 Production Security Fixes) Tj ET
+BT /F1 10.5 Tf 54.00 391.00 Td (Before public release:) Tj ET
+BT /F1 10.5 Tf 68.00 368.50 Td (- Replace development SECRET_KEY.) Tj ET
+BT /F1 10.5 Tf 68.00 352.00 Td (- Restrict backend CORS to your frontend domain.) Tj ET
+BT /F1 10.5 Tf 68.00 335.50 Td (- Remove --reload from backend production command.) Tj ET
+BT /F1 10.5 Tf 68.00 319.00 Td (- Do not expose MongoDB publicly without authentication.) Tj ET
+BT /F1 10.5 Tf 68.00 302.50 Td (- Move thumbnails from localStorage to backend storage.) Tj ET
+BT /F2 14 Tf 54.00 257.00 Td (12. Current Limitations) Tj ET
+BT /F1 10.5 Tf 54.00 226.00 Td (The app is strong for a portfolio project, but these limitations should be clear:) Tj ET
+BT /F1 10.5 Tf 68.00 203.50 Td (- Project thumbnails are local to one browser.) Tj ET
+BT /F1 10.5 Tf 68.00 187.00 Td (- No real-time collaboration.) Tj ET
+BT /F1 10.5 Tf 68.00 170.50 Td (- No sharing permissions.) Tj ET
+BT /F1 10.5 Tf 68.00 154.00 Td (- No room auto-detection.) Tj ET
+BT /F1 10.5 Tf 68.00 137.50 Td (- No automated tests yet.) Tj ET
+BT /F1 10.5 Tf 68.00 121.00 Td (- Docker frontend is development-mode Vite, not production static serving.) Tj ET
+BT /F1 10.5 Tf 68.00 104.50 Td (- Some 3D geometry is simplified.) Tj ET
+BT /F1 10.5 Tf 68.00 88.00 Td (- No cloud deployment configuration yet.) Tj ET
+BT /F1 8 Tf 558.00 28 Td (22) Tj ET
+endstream
+endobj
+49 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 48 0 R >>
+endobj
+50 0 obj
+<< /Length 2479 >>
+stream
+BT /F1 10.5 Tf 54.00 738.00 Td (These are acceptable for an MVP, but you should be able to explain them.) Tj ET
+BT /F2 14 Tf 54.00 692.50 Td (13. Recommended Next Improvements) Tj ET
+BT /F1 10.5 Tf 54.00 661.50 Td (Priority order:) Tj ET
+BT /F1 10.5 Tf 68.00 639.00 Td (1. Store dashboard thumbnails in the backend.) Tj ET
+BT /F1 10.5 Tf 68.00 622.50 Td (2. Add production deployment configuration.) Tj ET
+BT /F1 10.5 Tf 68.00 606.00 Td (3. Add tests for geometry helper functions.) Tj ET
+BT /F1 10.5 Tf 68.00 589.50 Td (4. Add room/area detection.) Tj ET
+BT /F1 10.5 Tf 68.00 573.00 Td (5. Add project sharing/export links.) Tj ET
+BT /F1 10.5 Tf 68.00 556.50 Td (6. Improve 3D realism.) Tj ET
+BT /F1 10.5 Tf 68.00 540.00 Td (7. Add project version history.) Tj ET
+BT /F1 10.5 Tf 68.00 523.50 Td (8. Add better mobile/tablet responsiveness.) Tj ET
+BT /F1 10.5 Tf 54.00 501.00 Td (The highest-impact job-search improvement is backend-stored thumbnails plus deployed live) Tj ET
+BT /F1 10.5 Tf 54.00 486.50 Td (URL. A recruiter or interviewer should be able to open the app, create an account, create a) Tj ET
+BT /F1 10.5 Tf 54.00 472.00 Td (project, draw a plan, and see it saved.) Tj ET
+BT /F2 14 Tf 54.00 426.50 Td (14. Suggested Portfolio Page Content) Tj ET
+BT /F2 12 Tf 54.00 388.50 Td (Title) Tj ET
+BT /F1 10.5 Tf 54.00 361.50 Td (HomePlanner - Full-Stack 2D/3D Floor Planning Web App) Tj ET
+BT /F2 12 Tf 54.00 332.00 Td (Short Description) Tj ET
+BT /F1 10.5 Tf 54.00 305.00 Td (A browser-based home design application with authenticated project management, a custom 2D) Tj ET
+BT /F1 10.5 Tf 54.00 290.50 Td (floor-plan editor, real-time 3D visualization, auto-save, export workflows, and polished) Tj ET
+BT /F1 10.5 Tf 54.00 276.00 Td (dashboard/authentication screens.) Tj ET
+BT /F2 12 Tf 54.00 246.50 Td (Tech Stack) Tj ET
+BT /F1 10.5 Tf 54.00 219.50 Td (React, TypeScript, Vite, Tailwind CSS, Zustand, Konva, Three.js, React Three Fiber, FastAPI,) Tj ET
+BT /F1 10.5 Tf 54.00 205.00 Td (MongoDB, Beanie, JWT, Docker.) Tj ET
+BT /F2 12 Tf 54.00 175.50 Td (Key Features) Tj ET
+BT /F1 10.5 Tf 68.00 148.50 Td (- User authentication.) Tj ET
+BT /F1 10.5 Tf 68.00 132.00 Td (- Project dashboard.) Tj ET
+BT /F1 10.5 Tf 68.00 115.50 Td (- 2D wall drawing with snapping.) Tj ET
+BT /F1 10.5 Tf 68.00 99.00 Td (- Doors, double doors, windows, gates, stairs, furniture, and text.) Tj ET
+BT /F1 10.5 Tf 68.00 82.50 Td (- Properties inspector.) Tj ET
+BT /F1 8 Tf 558.00 28 Td (23) Tj ET
+endstream
+endobj
+51 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 50 0 R >>
+endobj
+52 0 obj
+<< /Length 2671 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- Editable wall dimensions and units.) Tj ET
+BT /F1 10.5 Tf 68.00 721.50 Td (- Undo/redo.) Tj ET
+BT /F1 10.5 Tf 68.00 705.00 Td (- Auto-save.) Tj ET
+BT /F1 10.5 Tf 68.00 688.50 Td (- Save as PDF/Word/Image.) Tj ET
+BT /F1 10.5 Tf 68.00 672.00 Td (- Print.) Tj ET
+BT /F1 10.5 Tf 68.00 655.50 Td (- Real-time 3D visualization.) Tj ET
+BT /F1 10.5 Tf 68.00 639.00 Td (- 3D video recording.) Tj ET
+BT /F2 12 Tf 54.00 609.50 Td (Technical Highlights) Tj ET
+BT /F1 10.5 Tf 68.00 582.50 Td (- Built custom geometry interactions in a canvas editor.) Tj ET
+BT /F1 10.5 Tf 68.00 566.00 Td (- Converted 2D floor-plan data into 3D scene geometry.) Tj ET
+BT /F1 10.5 Tf 68.00 549.50 Td (- Designed a nested MongoDB schema for floor-plan persistence.) Tj ET
+BT /F1 10.5 Tf 68.00 533.00 Td (- Implemented JWT-authenticated API access.) Tj ET
+BT /F1 10.5 Tf 68.00 516.50 Td (- Added debounced auto-save and undo/redo history.) Tj ET
+BT /F2 14 Tf 54.00 471.00 Td (15. Suggested Resume Version) Tj ET
+BT /F1 10.5 Tf 54.00 440.00 Td (Use this for resume:) Tj ET
+BT /F1 10.5 Tf 54.00 417.50 Td (`text) Tj ET
+BT /F1 10.5 Tf 54.00 401.00 Td (HomePlanner - Full-Stack Floor Planning App) Tj ET
+BT /F1 10.5 Tf 68.00 384.50 Td (- Built a full-stack browser-based floor planning tool with React, TypeScript, FastAPI,) Tj ET
+BT /F1 10.5 Tf 68.00 370.00 Td (MongoDB, Konva, and Three.js.) Tj ET
+BT /F1 10.5 Tf 68.00 353.50 Td (- Implemented a custom 2D canvas editor with wall drawing, snapping, doors, windows,) Tj ET
+BT /F1 10.5 Tf 68.00 339.00 Td (stairs, furniture, text labels, selection, dragging, resizing, keyboard shortcuts, undo,) Tj ET
+BT /F1 10.5 Tf 68.00 324.50 Td (and redo.) Tj ET
+BT /F1 10.5 Tf 68.00 308.00 Td (- Developed real-time 3D visualization by transforming 2D floor-plan geometry into) Tj ET
+BT /F1 10.5 Tf 68.00 293.50 Td (Three.js wall, opening, floor, and furniture meshes.) Tj ET
+BT /F1 10.5 Tf 68.00 277.00 Td (- Added JWT authentication, protected routes, project CRUD, debounced auto-save, file) Tj ET
+BT /F1 10.5 Tf 68.00 262.50 Td (export, print workflows, and a polished project dashboard.) Tj ET
+BT /F1 10.5 Tf 54.00 246.00 Td (``) Tj ET
+BT /F2 14 Tf 54.00 200.50 Td (16. Final Assessment) Tj ET
+BT /F1 10.5 Tf 54.00 169.50 Td (HomePlanner is a strong portfolio project because it demonstrates multiple layers of) Tj ET
+BT /F1 10.5 Tf 54.00 155.00 Td (engineering:) Tj ET
+BT /F1 10.5 Tf 68.00 132.50 Td (- UI/UX design) Tj ET
+BT /F1 10.5 Tf 68.00 116.00 Td (- frontend state management) Tj ET
+BT /F1 10.5 Tf 68.00 99.50 Td (- 2D graphics) Tj ET
+BT /F1 10.5 Tf 68.00 83.00 Td (- 3D graphics) Tj ET
+BT /F1 8 Tf 558.00 28 Td (24) Tj ET
+endstream
+endobj
+53 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 52 0 R >>
+endobj
+54 0 obj
+<< /Length 1030 >>
+stream
+BT /F1 10.5 Tf 68.00 738.00 Td (- backend APIs) Tj ET
+BT /F1 10.5 Tf 68.00 721.50 Td (- database modeling) Tj ET
+BT /F1 10.5 Tf 68.00 705.00 Td (- authentication) Tj ET
+BT /F1 10.5 Tf 68.00 688.50 Td (- persistence) Tj ET
+BT /F1 10.5 Tf 68.00 672.00 Td (- export workflows) Tj ET
+BT /F1 10.5 Tf 68.00 655.50 Td (- product iteration) Tj ET
+BT /F1 10.5 Tf 54.00 633.00 Td (The project is suitable for job applications because it shows that you can build more than a) Tj ET
+BT /F1 10.5 Tf 54.00 618.50 Td (simple CRUD app. It proves you can handle complex user interaction, spatial data, and) Tj ET
+BT /F1 10.5 Tf 54.00 604.00 Td (full-stack architecture.) Tj ET
+BT /F1 10.5 Tf 54.00 581.50 Td (To make it stronger for hiring, the next best step is to deploy it publicly and add) Tj ET
+BT /F1 10.5 Tf 54.00 567.00 Td (backend-stored project thumbnails. After that, record a short demo video and place the) Tj ET
+BT /F1 10.5 Tf 54.00 552.50 Td (project on your resume, GitHub, and portfolio.) Tj ET
+BT /F1 8 Tf 558.00 28 Td (25) Tj ET
+endstream
+endobj
+55 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 54 0 R >>
+endobj
+xref
+0 56
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000283 00000 n 
+0000000353 00000 n 
+0000000428 00000 n 
+0000000496 00000 n 
+0000003778 00000 n 
+0000003924 00000 n 
+0000006470 00000 n 
+0000006616 00000 n 
+0000009135 00000 n 
+0000009283 00000 n 
+0000011914 00000 n 
+0000012062 00000 n 
+0000014533 00000 n 
+0000014681 00000 n 
+0000017169 00000 n 
+0000017317 00000 n 
+0000019684 00000 n 
+0000019832 00000 n 
+0000021975 00000 n 
+0000022123 00000 n 
+0000024696 00000 n 
+0000024844 00000 n 
+0000027018 00000 n 
+0000027166 00000 n 
+0000029719 00000 n 
+0000029867 00000 n 
+0000032148 00000 n 
+0000032296 00000 n 
+0000035307 00000 n 
+0000035455 00000 n 
+0000037819 00000 n 
+0000037967 00000 n 
+0000040330 00000 n 
+0000040478 00000 n 
+0000043208 00000 n 
+0000043356 00000 n 
+0000045883 00000 n 
+0000046031 00000 n 
+0000049152 00000 n 
+0000049300 00000 n 
+0000052984 00000 n 
+0000053132 00000 n 
+0000055772 00000 n 
+0000055920 00000 n 
+0000058049 00000 n 
+0000058197 00000 n 
+0000060443 00000 n 
+0000060591 00000 n 
+0000063123 00000 n 
+0000063271 00000 n 
+0000065995 00000 n 
+0000066143 00000 n 
+0000067226 00000 n 
+trailer
+<< /Size 56 /Root 1 0 R >>
+startxref
+67374
+%%EOF
