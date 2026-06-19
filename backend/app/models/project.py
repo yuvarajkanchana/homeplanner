@@ -22,6 +22,8 @@ class Wall(BaseModel):
     height: float = 2.8       # metres, for 3D
     color: Optional[str] = None
     dimension_offset: Optional[float] = None
+    wall_type: Optional[str] = None
+    curved: Optional[bool] = None
 
 
 class Opening(BaseModel):
@@ -41,6 +43,10 @@ class Opening(BaseModel):
     handle_style: Optional[str] = None
     frame_color: Optional[str] = None
     panel_color: Optional[str] = None
+    build_variant: Optional[str] = None
+    window_style: Optional[str] = None
+    door_open: Optional[bool] = None
+    rotation: Optional[float] = None
 
 
 class PlacedObject(BaseModel):
@@ -53,6 +59,33 @@ class PlacedObject(BaseModel):
     height: float
     rotation: float = 0.0
     color: str = "#a3b18a"
+    elevation: Optional[float] = None
+    font_size: Optional[float] = None
+    build_variant: Optional[str] = None
+    stair_shape: Optional[str] = None
+    landing_width: Optional[float] = None
+    landing_depth: Optional[float] = None
+    left_run_width: Optional[float] = None
+    right_run_width: Optional[float] = None
+    # Legacy fields retained so older saved projects continue to load.
+    leftRunWidth: Optional[float] = None
+    rightRunWidth: Optional[float] = None
+    landingWidth: Optional[float] = None
+    landing_turn: Optional[str] = None
+    stair_height: Optional[float] = None
+    stair_steps: Optional[int] = None
+
+
+class FloorLevel(BaseModel):
+    id: str = Field(default_factory=new_id)
+    name: str = "Ground Floor"
+    level: int = 0
+    walls: List[Wall] = []
+    openings: List[Opening] = []
+    objects: List[PlacedObject] = []
+    canvas_width: float = 1200
+    canvas_height: float = 800
+    grid_size: float = 20.0
 
 
 class FloorPlan(BaseModel):
@@ -62,6 +95,8 @@ class FloorPlan(BaseModel):
     canvas_width: float = 1200
     canvas_height: float = 800
     grid_size: float = 20.0
+    floors: List[FloorLevel] = []
+    active_floor_id: Optional[str] = None
 
 
 class Project(Document):

@@ -11,6 +11,8 @@ export interface Wall {
   height: number
   color?: string
   dimension_offset?: number
+  wall_type?: string
+  curved?: boolean
 }
 
 export interface Opening {
@@ -24,13 +26,16 @@ export interface Opening {
   height?: number
   elevation?: number
   trim?: number
-  door_style?: 'hinged' | 'double' | 'sliding' | 'opening'
+  door_style?: 'hinged' | 'double' | 'sliding' | 'opening' | 'pocket' | 'bifold' | 'garage' | 'fixed' | 'barn' | 'shower'
   mount?: 'center' | 'interior' | 'exterior'
   swing_direction?: 'in' | 'out'
   swing_angle?: number
+  door_open?: boolean
   handle_style?: 'knob' | 'lever' | 'bar' | 'none'
+  window_style?: 'awning' | 'bay' | 'bow' | 'casement' | 'cottage' | 'center_pivot' | 'dormer' | 'double_hung' | 'egress' | 'fixed' | 'french' | 'garden' | 'hopper' | 'glass_block' | 'jalousie' | 'lunette' | 'oriel' | 'palladian' | 'picture' | 'radius' | 'round' | 'single_hung' | 'skylight' | 'storm' | 'three_panel_slider' | 'tilt_turn' | 'transom' | 'two_panel_slider'
   frame_color?: string
   panel_color?: string
+  build_variant?: string
 }
 
 export interface PlacedObject {
@@ -43,15 +48,40 @@ export interface PlacedObject {
   height: number
   rotation: number
   color: string
+  elevation?: number
+  font_size?: number
+  build_variant?: string
   stair_shape?: 'straight' | 'landing' | 'return_landing'
   landing_width?: number
   landing_depth?: number
+  left_run_width?: number
+  right_run_width?: number
+  /** @deprecated Legacy stair dimensions retained for saved-plan compatibility. */
+  leftRunWidth?: number
+  /** @deprecated Legacy stair dimensions retained for saved-plan compatibility. */
+  rightRunWidth?: number
+  /** @deprecated Use landing_width. */
+  landingWidth?: number
   landing_turn?: 'left' | 'right'
   stair_height?: number
   stair_steps?: number
 }
 
 export interface FloorPlan {
+  walls: Wall[]
+  openings: Opening[]
+  objects: PlacedObject[]
+  canvas_width: number
+  canvas_height: number
+  grid_size: number
+  floors?: FloorLevel[]
+  active_floor_id?: string
+}
+
+export interface FloorLevel {
+  id: string
+  name: string
+  level: number
   walls: Wall[]
   openings: Opening[]
   objects: PlacedObject[]

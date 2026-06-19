@@ -1,23 +1,24 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from app.core.db import init_db
-from app.core.config import settings
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from app.api.v1 import auth, projects
+from app.core.config import settings
+from app.core.db import init_db
 
 
-# 🔁 Startup (DB connection)
+# Startup (DB connection)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("🚀 Starting backend...")
+    print("Starting backend...")
     await init_db()
-    print("✅ Database connected")
+    print("Database connected")
     yield
-    print("🛑 Shutting down backend...")
+    print("Shutting down backend...")
 
 
-# 🚀 Create app
+# Create app
 app = FastAPI(
     title="HomePlanner API",
     version="1.0.0",
@@ -38,15 +39,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 📦 Routes
+# Routes
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(projects.router, prefix="/api/v1")
 
 
-# ❤️ Health check
+# Health check
 @app.get("/")
 async def root():
     return {"message": "HomePlanner API running"}
+
 
 @app.get("/health")
 async def health():

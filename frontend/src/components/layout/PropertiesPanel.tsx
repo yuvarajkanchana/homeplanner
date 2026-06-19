@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useFloorPlanStore } from '../../store/useFloorPlanStore'
 import { ChevronDown, ChevronUp, Settings, X } from 'lucide-react'
-import type { Opening } from '../../types/schema'
+import type { Opening, PlacedObject } from '../../types/schema'
 import type { MeasurementUnit } from '../../store/useFloorPlanStore'
 
 type DoorStyle = NonNullable<Opening['door_style']>
 type DoorMount = NonNullable<Opening['mount']>
 type SwingDirection = NonNullable<Opening['swing_direction']>
 type HandleStyle = NonNullable<Opening['handle_style']>
+type WindowStyle = NonNullable<Opening['window_style']>
 type StairShape = 'straight' | 'landing' | 'return_landing'
 type LandingTurn = 'left' | 'right'
 
@@ -206,6 +207,17 @@ export default function PropertiesPanel() {
               onFocus={pushHistory}
               onChange={(v) => updateWall(wall.id, { color: v })}
             />
+            <button
+              type="button"
+              className="w-full rounded border border-border bg-gray-800 px-2 py-1.5 text-xs font-medium text-gray-100 transition-colors hover:bg-gray-700"
+              onClick={() => {
+                const color = wall.color ?? '#ffffff'
+                pushHistory()
+                walls.forEach((item) => updateWall(item.id, { color }))
+              }}
+            >
+              Apply to all walls
+            </button>
             <div className="pt-1">
               <div className="text-xs text-gray-500">
                 Length: {formatLength(wallLen, measurementUnit)}
@@ -222,7 +234,16 @@ export default function PropertiesPanel() {
               label="Width"
               value={opening.width}
               onFocus={pushHistory}
-              onChange={(v) => updateOpening(opening.id, { width: +v })}
+              onChange={(v) => updateOpening(opening.id, {
+                width: +v,
+                ...(opening.type === 'door'
+                  ? {
+                    door_style: (opening.door_style ?? 'hinged') === 'hinged' && +v >= 80
+                      ? 'double'
+                      : (opening.door_style ?? 'hinged'),
+                  }
+                  : {}),
+              })}
               min={20}
               max={selectedWall ? Math.max(20, Math.hypot(selectedWall.end.x - selectedWall.start.x, selectedWall.end.y - selectedWall.start.y)) : 500}
             />
@@ -248,6 +269,12 @@ export default function PropertiesPanel() {
                     <option value="hinged">Hinged</option>
                     <option value="double">Double</option>
                     <option value="sliding">Sliding</option>
+                    <option value="pocket">Pocket</option>
+                    <option value="bifold">Bifold</option>
+                    <option value="garage">Garage</option>
+                    <option value="fixed">Fixed</option>
+                    <option value="barn">Barn</option>
+                    <option value="shower">Shower</option>
                     <option value="opening">Opening only</option>
                   </select>
                 </div>
@@ -363,8 +390,43 @@ export default function PropertiesPanel() {
             )}
 
             {opening.type === 'window' && (
-              <div className="text-xs text-gray-500">
-                Window controls can be expanded next with sill height, glass tint, and frame color.
+              <div>
+                <label className="block text-xs text-gray-400 mb-1">Window style</label>
+                <select
+                  className="input-field text-xs py-1"
+                  value={opening.window_style ?? 'double_hung'}
+                  onFocus={pushHistory}
+                  onChange={(e) => updateOpening(opening.id, { window_style: e.target.value as WindowStyle })}
+                >
+                  <option value="awning">Awning</option>
+                  <option value="bay">Bay</option>
+                  <option value="bow">Bow</option>
+                  <option value="casement">Casement</option>
+                  <option value="cottage">Cottage</option>
+                  <option value="center_pivot">Center pivot</option>
+                  <option value="dormer">Dormer</option>
+                  <option value="double_hung">Double-hung</option>
+                  <option value="egress">Egress</option>
+                  <option value="fixed">Fixed</option>
+                  <option value="french">French door</option>
+                  <option value="garden">Garden</option>
+                  <option value="hopper">Hopper</option>
+                  <option value="glass_block">Glass block</option>
+                  <option value="jalousie">Jalousie</option>
+                  <option value="lunette">Lunette</option>
+                  <option value="oriel">Oriel</option>
+                  <option value="palladian">Palladian</option>
+                  <option value="picture">Picture</option>
+                  <option value="radius">Radius</option>
+                  <option value="round">Round</option>
+                  <option value="single_hung">Single-hung</option>
+                  <option value="skylight">Skylight</option>
+                  <option value="storm">Storm</option>
+                  <option value="three_panel_slider">Three-panel slider</option>
+                  <option value="tilt_turn">Tilt and turn</option>
+                  <option value="transom">Transom</option>
+                  <option value="two_panel_slider">Two-panel slider</option>
+                </select>
               </div>
             )}
           </>
@@ -412,14 +474,66 @@ export default function PropertiesPanel() {
                 />
                 {(obj.stair_shape === 'landing' || obj.stair_shape === 'return_landing') && (
                   <>
-                    <PropRow
-                      label="Landing width"
-                      value={obj.landing_width ?? 80}
-                      onFocus={pushHistory}
-                      onChange={(v) => updateObject(obj.id, { landing_width: clampNumber(v, obj.landing_width ?? 80, 30, 240) })}
-                      min={30}
-                      max={240}
-                    />
+                    {obj.stair_shape === 'landing' ? (
+                      <PropRow
+                        label="Landing width"
+                        value={obj.landing_width ?? 80}
+                        onFocus={pushHistory}
+                        onChange={(v) => updateObject(obj.id, { landing_width: clampNumber(v, obj.landing_width ?? 80, 30, 240) })}
+                        min={30}
+                        max={240}
+                      />
+                    ) : (() => {
+                      const legacyLandingWidth = Math.min(obj.width * 0.34, Math.max(34, obj.landing_width ?? 80))
+                      const currentLandingWidth = obj.landing_width ?? obj.landingWidth ?? legacyLandingWidth
+                      const legacyRunWidth = Math.max(12, obj.width - currentLandingWidth)
+                      const leftRunWidth = obj.left_run_width ?? obj.leftRunWidth ?? legacyRunWidth
+                      const rightRunWidth = obj.right_run_width ?? obj.rightRunWidth ?? legacyRunWidth
+                      const updateReturnDimensions = (updates: Partial<PlacedObject>) => {
+                        const nextLandingWidth = updates.landing_width ?? currentLandingWidth
+                        const nextLeftRunWidth = updates.left_run_width ?? leftRunWidth
+                        const nextRightRunWidth = updates.right_run_width ?? rightRunWidth
+                        updateObject(obj.id, {
+                          ...updates,
+                          width: nextLandingWidth + Math.max(nextLeftRunWidth, nextRightRunWidth),
+                        })
+                      }
+
+                      return (
+                        <>
+                          <PropRow
+                            label="Left run width"
+                            value={leftRunWidth}
+                            onFocus={pushHistory}
+                            onChange={(v) => updateReturnDimensions({
+                              left_run_width: clampNumber(v, leftRunWidth, 12, 500),
+                            })}
+                            min={12}
+                            max={500}
+                          />
+                          <PropRow
+                            label="Right run width"
+                            value={rightRunWidth}
+                            onFocus={pushHistory}
+                            onChange={(v) => updateReturnDimensions({
+                              right_run_width: clampNumber(v, rightRunWidth, 12, 500),
+                            })}
+                            min={12}
+                            max={500}
+                          />
+                          <PropRow
+                            label="Landing width"
+                            value={currentLandingWidth}
+                            onFocus={pushHistory}
+                            onChange={(v) => updateReturnDimensions({
+                              landing_width: clampNumber(v, currentLandingWidth, 30, 240),
+                            })}
+                            min={30}
+                            max={240}
+                          />
+                        </>
+                      )
+                    })()}
                     <PropRow
                       label="Landing depth"
                       value={obj.landing_depth ?? 80}

@@ -12,6 +12,7 @@ import Toolbar from '../components/layout/Toolbar'
 import EditorHeader from '../components/layout/EditorHeader'
 import StatusBar from '../components/layout/StatusBar'
 import PropertiesPanel from '../components/layout/PropertiesPanel'
+import FloorTabs from '../components/layout/FloorTabs'
 
 import toast from 'react-hot-toast'
 
@@ -86,6 +87,7 @@ export default function EditorPage() {
         view={view}
         onViewChange={setView}
       />
+      <FloorTabs />
 
       <div className="flex flex-1 overflow-hidden">
         <Toolbar />

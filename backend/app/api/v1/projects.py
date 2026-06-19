@@ -9,14 +9,15 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 
 
 def to_summary(p: Project) -> ProjectSummary:
+    floors = p.floor_plan.floors
     return ProjectSummary(
         id=str(p.id),
         name=p.name,
         description=p.description,
         created_at=p.created_at,
         updated_at=p.updated_at,
-        wall_count=len(p.floor_plan.walls),
-        object_count=len(p.floor_plan.objects),
+        wall_count=sum(len(floor.walls) for floor in floors) if floors else len(p.floor_plan.walls),
+        object_count=sum(len(floor.objects) for floor in floors) if floors else len(p.floor_plan.objects),
     )
 
 

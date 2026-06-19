@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { v4 as uuidv4 } from 'uuid'
-import type { Wall, Opening, PlacedObject, FloorPlan, Tool } from '../types/schema'
+import type { Wall, Opening, PlacedObject, FloorPlan, FloorLevel, Tool } from '../types/schema'
 
 export type MeasurementUnit = 'm' | 'ft' | 'in'
 export type WallMeasurementMode = 'outer' | 'none' | 'all'
@@ -13,8 +13,11 @@ interface FloorPlanStore {
   canvas_width: number
   canvas_height: number
   grid_size: number
+  floors: FloorLevel[]
+  activeFloorId: string
   selectedId: string | null
   activeTool: Tool
+  buildPreset: string | null
   measurementUnit: MeasurementUnit
   wallMeasurementMode: WallMeasurementMode
   isDirty: boolean
@@ -27,7 +30,11 @@ interface FloorPlanStore {
 
   // Tool
   setTool: (t: Tool) => void
+  setBuildPreset: (preset: string | null) => void
   setSelected: (id: string | null) => void
+  setGridSize: (size: number) => void
+  addFloor: () => void
+  setActiveFloor: (id: string) => void
   toggleMeasurementUnit: () => void
   toggleWallMeasurementMode: () => void
 
@@ -66,6 +73,28 @@ const EMPTY_PLAN: FloorPlan = {
   grid_size: 20,
 }
 
+const floorName = (level: number) => {
+  if (level === 0) return 'Ground Floor'
+  if (level === 1) return 'First Floor'
+  if (level === 2) return 'Second Floor'
+  if (level === 3) return 'Third Floor'
+  return `${level}th Floor`
+}
+
+const emptyFloor = (level: number): FloorLevel => ({
+  id: uuidv4(),
+  name: floorName(level),
+  level,
+  walls: [],
+  openings: [],
+  objects: [],
+  canvas_width: 1200,
+  canvas_height: 800,
+  grid_size: 20,
+})
+
+const initialFloor = emptyFloor(0)
+
 export const useFloorPlanStore = create<FloorPlanStore>((set, get) => ({
   walls: [],
   openings: [],
@@ -73,8 +102,11 @@ export const useFloorPlanStore = create<FloorPlanStore>((set, get) => ({
   canvas_width: 1200,
   canvas_height: 800,
   grid_size: 20,
+  floors: [initialFloor],
+  activeFloorId: initialFloor.id,
   selectedId: null,
   activeTool: 'select',
+  buildPreset: null,
   measurementUnit: 'm',
   wallMeasurementMode: 'outer',
   isDirty: false,
@@ -82,8 +114,73 @@ export const useFloorPlanStore = create<FloorPlanStore>((set, get) => ({
   historyIndex: -1,
   future: [],
 
-  setTool: (t) => set({ activeTool: t, selectedId: null }),
+  setTool: (t) => set({ activeTool: t, selectedId: null, buildPreset: null }),
+  setBuildPreset: (preset) => set({ buildPreset: preset }),
   setSelected: (id) => set({ selectedId: id }),
+  setGridSize: (size) => set({ grid_size: size, isDirty: true }),
+  addFloor: () => {
+    const s = get()
+    const current: FloorLevel = {
+      id: s.activeFloorId,
+      name: s.floors.find(floor => floor.id === s.activeFloorId)?.name ?? 'Ground Floor',
+      level: s.floors.find(floor => floor.id === s.activeFloorId)?.level ?? 0,
+      walls: s.walls,
+      openings: s.openings,
+      objects: s.objects,
+      canvas_width: s.canvas_width,
+      canvas_height: s.canvas_height,
+      grid_size: s.grid_size,
+    }
+    const nextLevel = s.floors.length === 0 ? 0 : Math.max(...s.floors.map(floor => floor.level)) + 1
+    const next = emptyFloor(nextLevel)
+    set({
+      floors: [...s.floors.map(floor => floor.id === current.id ? current : floor), next],
+      activeFloorId: next.id,
+      walls: next.walls,
+      openings: next.openings,
+      objects: next.objects,
+      canvas_width: next.canvas_width,
+      canvas_height: next.canvas_height,
+      grid_size: next.grid_size,
+      selectedId: null,
+      history: [],
+      historyIndex: -1,
+      future: [],
+      isDirty: true,
+    })
+  },
+  setActiveFloor: (id) => {
+    const s = get()
+    if (id === s.activeFloorId) return
+    const target = s.floors.find(floor => floor.id === id)
+    if (!target) return
+    const floors = s.floors.map(floor => floor.id === s.activeFloorId
+      ? {
+        ...floor,
+        walls: s.walls,
+        openings: s.openings,
+        objects: s.objects,
+        canvas_width: s.canvas_width,
+        canvas_height: s.canvas_height,
+        grid_size: s.grid_size,
+      }
+      : floor)
+    set({
+      floors,
+      activeFloorId: id,
+      walls: target.walls,
+      openings: target.openings,
+      objects: target.objects,
+      canvas_width: target.canvas_width,
+      canvas_height: target.canvas_height,
+      grid_size: target.grid_size,
+      selectedId: null,
+      history: [],
+      historyIndex: -1,
+      future: [],
+      isDirty: true,
+    })
+  },
   toggleMeasurementUnit: () => set((s) => ({
     measurementUnit: s.measurementUnit === 'm' ? 'ft' : s.measurementUnit === 'ft' ? 'in' : 'm',
   })),
@@ -208,13 +305,30 @@ export const useFloorPlanStore = create<FloorPlanStore>((set, get) => ({
   },
 
   hydrate: (plan) => {
+    const floors = plan.floors?.length
+      ? plan.floors
+      : [{
+        id: uuidv4(),
+        name: 'Ground Floor',
+        level: 0,
+        walls: plan.walls,
+        openings: plan.openings,
+        objects: plan.objects,
+        canvas_width: plan.canvas_width,
+        canvas_height: plan.canvas_height,
+        grid_size: plan.grid_size,
+      }]
+    const active = floors.find(floor => floor.id === plan.active_floor_id) ?? floors[0]
     set({
-      walls: plan.walls,
-      openings: plan.openings,
-      objects: plan.objects,
-      canvas_width: plan.canvas_width,
-      canvas_height: plan.canvas_height,
-      grid_size: plan.grid_size,
+      walls: active.walls,
+      openings: active.openings,
+      objects: active.objects,
+      canvas_width: active.canvas_width,
+      canvas_height: active.canvas_height,
+      grid_size: active.grid_size,
+      floors,
+      activeFloorId: active.id,
+      selectedId: null,
       isDirty: false,
       history: [],
       historyIndex: -1,
@@ -224,6 +338,17 @@ export const useFloorPlanStore = create<FloorPlanStore>((set, get) => ({
 
   getFloorPlan: () => {
     const s = get()
+    const floors = s.floors.map(floor => floor.id === s.activeFloorId
+      ? {
+        ...floor,
+        walls: s.walls,
+        openings: s.openings,
+        objects: s.objects,
+        canvas_width: s.canvas_width,
+        canvas_height: s.canvas_height,
+        grid_size: s.grid_size,
+      }
+      : floor)
     return {
       walls: s.walls,
       openings: s.openings,
@@ -231,6 +356,8 @@ export const useFloorPlanStore = create<FloorPlanStore>((set, get) => ({
       canvas_width: s.canvas_width,
       canvas_height: s.canvas_height,
       grid_size: s.grid_size,
+      floors,
+      active_floor_id: s.activeFloorId,
     }
   },
   updateOpening: (id, updates) => {

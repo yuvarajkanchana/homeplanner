@@ -42,6 +42,38 @@ First build takes 3–5 minutes (installing npm packages + pip packages).
 
 ---
 
+## Local Development Without Docker
+
+If you run the frontend and backend directly on Windows, start MongoDB first and use localhost URLs.
+
+Backend:
+
+```bash
+cd backend
+copy .env.example .env
+python -m pip install -r requirements.txt
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+Frontend:
+
+```bash
+cd frontend
+copy .env.example .env
+npm install
+npm run dev
+```
+
+For deployed frontend builds, set `VITE_API_URL` to the deployed backend URL, for example:
+
+```env
+VITE_API_URL=https://your-render-service.onrender.com
+```
+
+For Render backend deploys, make sure `MONGO_URL`, `SECRET_KEY`, and `CORS_ORIGINS` are set in the Render service environment.
+
+---
+
 ## Using the App
 
 ### Register & Login

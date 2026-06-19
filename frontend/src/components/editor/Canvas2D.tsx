@@ -22,6 +22,28 @@ function getTextboxFontSize(width: number, height: number) {
   return Math.max(7, Math.min(22, height * 0.32, width * 0.12))
 }
 
+function RotateHandleIcon({ x, y, rotation = 0 }: { x: number; y: number; rotation?: number }) {
+  return (
+    <Group x={x} y={y} rotation={rotation} listening={false}>
+      <Arc
+        innerRadius={3.3}
+        outerRadius={5.8}
+        angle={275}
+        rotation={-42}
+        fill="#ffffff"
+      />
+      <Line
+        points={[2.8, -6.2, 7.1, -5.2, 5.1, -1.2]}
+        closed
+        fill="#ffffff"
+        stroke="#ffffff"
+        strokeWidth={0.6}
+        lineJoin="round"
+      />
+    </Group>
+  )
+}
+
 /**
  * Snap to the nearest wall endpoint within SNAP_ENDPOINT_DIST,
  * otherwise fall back to grid snap.
@@ -360,7 +382,7 @@ function DoorShape({ wall, opening, selected, onSelect, onDelete, onChange }: {
     )
   }
 
-  if (doorStyle === 'sliding') {
+  if (doorStyle === 'sliding' || doorStyle === 'pocket' || doorStyle === 'barn') {
     const perp = angleRad + Math.PI / 2
     const panelOffset = (wall.thickness + 8) / 2
     const ax = Math.cos(angleRad) * w / 2
@@ -474,10 +496,10 @@ function DoorShape({ wall, opening, selected, onSelect, onDelete, onChange }: {
             <Circle
               x={rotateHandleX}
               y={rotateHandleY}
-              radius={6}
+              radius={8}
               fill="#4f6ef7"
               stroke="#fff"
-              strokeWidth={1}
+              strokeWidth={1.5}
               draggable
               onMouseDown={stopKonvaBubble}
               onDragStart={(e) => { stopKonvaBubble(e); pushHistory() }}
@@ -492,6 +514,7 @@ function DoorShape({ wall, opening, selected, onSelect, onDelete, onChange }: {
                 onChange({ rotation: Math.round(ang / 5) * 5 })
               }}
             />
+            <RotateHandleIcon x={rotateHandleX} y={rotateHandleY} />
           </>
         )}
       </Group>
@@ -567,7 +590,10 @@ function DoorShape({ wall, opening, selected, onSelect, onDelete, onChange }: {
 
             const newWidth = Math.max(30, Math.abs(proj) * 2)
 
-            onChange({ width: newWidth })
+            onChange({
+              width: newWidth,
+              door_style: newWidth >= 80 ? 'double' : (opening.door_style ?? 'hinged'),
+            })
           }}
         />
       )}
@@ -585,10 +611,10 @@ function DoorShape({ wall, opening, selected, onSelect, onDelete, onChange }: {
           <Circle
             x={rotateHandleX}
             y={rotateHandleY}
-            radius={6}
+            radius={8}
             fill="#4f6ef7"
             stroke="#fff"
-            strokeWidth={1}
+            strokeWidth={1.5}
             draggable
             onMouseDown={stopKonvaBubble}
             onDragStart={(e) => { stopKonvaBubble(e); pushHistory() }}
@@ -613,6 +639,7 @@ function DoorShape({ wall, opening, selected, onSelect, onDelete, onChange }: {
               e.target.y(pos.y + Math.sin(nextRad) * rotateHandleDistance)
             }}
           />
+          <RotateHandleIcon x={rotateHandleX} y={rotateHandleY} />
         </>
       )}
     </Group>
@@ -636,7 +663,10 @@ function WindowShape({ wall, opening, selected, onSelect, onDelete, onChange }: 
   const ay = Math.sin(angle) * w / 2
   const px = Math.cos(perp) * thick / 2
   const py = Math.sin(perp) * thick / 2
-  const lines = [-thick / 4, 0, thick / 4]
+  const startX = pos.x - ax
+  const startY = pos.y - ay
+  const endX = pos.x + ax
+  const endY = pos.y + ay
   const resizeHandleX = pos.x + Math.cos(angle) * (opening.width / 2)
   const resizeHandleY = pos.y + Math.sin(angle) * (opening.width / 2)
 
@@ -664,27 +694,30 @@ function WindowShape({ wall, opening, selected, onSelect, onDelete, onChange }: 
         e.target.y(0)
       }}
     >
+      {/* Wide transparent hit target keeps the slim symbol easy to select. */}
       <Line
-        points={[
-          pos.x - ax + px, pos.y - ay + py,
-          pos.x + ax + px, pos.y + ay + py,
-          pos.x + ax - px, pos.y + ay - py,
-          pos.x - ax - px, pos.y - ay - py,
-        ]}
-        closed
-        stroke={WINDOW_COLOR}
-        strokeWidth={selected ? 2 : 1.5}
-        fill="rgba(0,0,0,0.08)"
+        points={[startX, startY, endX, endY]}
+        stroke="rgba(0,0,0,0.01)"
+        strokeWidth={Math.max(18, thick + 8)}
       />
-      {lines.map((offset, i) => (
+      {/* Single glazing line through the center of the wall opening. */}
+      <Line
+        points={[startX, startY, endX, endY]}
+        stroke={selected ? WALL_SELECTED : '#4b5563'}
+        strokeWidth={selected ? 2 : 1.25}
+        lineCap="butt"
+      />
+      {/* Narrow jambs at each end, matching a clean plan-view window symbol. */}
+      {[
+        [startX, startY],
+        [endX, endY],
+      ].map(([x, y], index) => (
         <Line
-          key={i}
-          points={[
-            pos.x - ax + Math.cos(perp) * offset, pos.y - ay + Math.sin(perp) * offset,
-            pos.x + ax + Math.cos(perp) * offset, pos.y + ay + Math.sin(perp) * offset,
-          ]}
-          stroke={WINDOW_COLOR}
-          strokeWidth={0.8} opacity={0.6}
+          key={`window-jamb-${index}`}
+          points={[x + px, y + py, x - px, y - py]}
+          stroke={selected ? WALL_SELECTED : WINDOW_COLOR}
+          strokeWidth={selected ? 2.2 : 1.6}
+          lineCap="square"
         />
       ))}
       {selected && (
@@ -762,6 +795,16 @@ function WallShape({ wall, openings, selected, tool, onSelect, onChange, onEndpo
   const len = wallLength(wall)
   const angle = wallAngle(wall)
   const thick = wall.thickness
+  const wallFill = wall.wall_type?.includes('glass')
+    ? '#c9eef8'
+    : wall.wall_type === 'room-divider'
+      ? '#d1d5db'
+      : wall.color ?? '#ffffff'
+  const wallDash = wall.wall_type === 'room-divider'
+    ? [8, 5]
+    : wall.wall_type === 'wall-hatching'
+      ? [3, 3]
+      : undefined
   const half = thick / 2
   const dimensionDrag = useRef<{
     offset: number
@@ -872,12 +915,25 @@ function WallShape({ wall, openings, selected, tool, onSelect, onChange, onEndpo
         stopKonvaBubble(e)
         if (renderPass !== 'fill') return
         pushHistory()
+        const connectionTolerance = Math.max(6, wall.thickness / 2 + 2)
         const connectedToWall = allWalls.flatMap((w) => {
           const connected: WallBodyConnection[] = []
-          if (Math.hypot(w.start.x - wall.start.x, w.start.y - wall.start.y) <= 1) connected.push({ wallId: w.id, endpoint: 'start', point: { ...w.start } })
-          if (Math.hypot(w.end.x - wall.start.x, w.end.y - wall.start.y) <= 1) connected.push({ wallId: w.id, endpoint: 'end', point: { ...w.end } })
-          if (Math.hypot(w.start.x - wall.end.x, w.start.y - wall.end.y) <= 1) connected.push({ wallId: w.id, endpoint: 'start', point: { ...w.start } })
-          if (Math.hypot(w.end.x - wall.end.x, w.end.y - wall.end.y) <= 1) connected.push({ wallId: w.id, endpoint: 'end', point: { ...w.end } })
+          const endpoints = [
+            ['start', w.start],
+            ['end', w.end],
+          ] as const
+          endpoints.forEach(([endpoint, point]) => {
+            const touchesStart = Math.hypot(point.x - wall.start.x, point.y - wall.start.y) <= connectionTolerance
+            const touchesEnd = Math.hypot(point.x - wall.end.x, point.y - wall.end.y) <= connectionTolerance
+            const projection = projectOntoWall(point.x, point.y, wall)
+            const touchesBody = projection
+              && projection.dist <= connectionTolerance
+              && projection.offset > 0.01
+              && projection.offset < 0.99
+            if (w.id === wall.id || touchesStart || touchesEnd || touchesBody) {
+              connected.push({ wallId: w.id, endpoint, point: { ...point } })
+            }
+          })
           return connected
         })
         wallDrag.current = {
@@ -905,16 +961,24 @@ function WallShape({ wall, openings, selected, tool, onSelect, onChange, onEndpo
       }}
     >
       {renderPass !== 'details' && segments.map(([t0, t1], i) => {
+        // Square line caps already extend by half the stroke width. Extending
+        // the center line as well doubles the overlap and creates cross-shaped
+        // blocks at corners and T-junctions.
         const sx = wall.start.x + (wall.end.x - wall.start.x) * t0
         const sy = wall.start.y + (wall.end.y - wall.start.y) * t0
         const ex = wall.start.x + (wall.end.x - wall.start.x) * t1
         const ey = wall.start.y + (wall.end.y - wall.start.y) * t1
+        const curveOffset = wall.curved ? len * 0.14 : 0
+        const linePoints = wall.curved
+          ? [sx, sy, (sx + ex) / 2 + cosP * curveOffset, (sy + ey) / 2 + sinP * curveOffset, ex, ey]
+          : [sx, sy, ex, ey]
 
         return (
           <Group key={i}>
             {renderPass === 'outline' && selected && (
               <Line
-                points={[sx, sy, ex, ey]}
+                points={linePoints}
+                tension={wall.curved ? 0.5 : 0}
                 stroke={WALL_SELECTED}
                 strokeWidth={thick + 6}
                 lineCap="square"
@@ -924,7 +988,8 @@ function WallShape({ wall, openings, selected, tool, onSelect, onChange, onEndpo
             )}
             {renderPass === 'outline' && (
               <Line
-                points={[sx, sy, ex, ey]}
+                points={linePoints}
+                tension={wall.curved ? 0.5 : 0}
                 stroke="#111827"
                 strokeWidth={thick + 2}
                 lineCap="square"
@@ -935,15 +1000,18 @@ function WallShape({ wall, openings, selected, tool, onSelect, onChange, onEndpo
             {renderPass === 'fill' && (
               <>
                 <Line
-                  points={[sx, sy, ex, ey]}
-                  stroke="#ffffff"
+                  points={linePoints}
+                  tension={wall.curved ? 0.5 : 0}
+                  stroke={wallFill}
                   strokeWidth={Math.max(1, thick - 2)}
                   lineCap="square"
                   lineJoin="miter"
+                  dash={wallDash}
                 />
                 {selected && tool === 'select' && (
                   <Line
-                    points={[sx, sy, ex, ey]}
+                    points={linePoints}
+                    tension={wall.curved ? 0.5 : 0}
                     stroke="rgba(255,255,255,0.01)"
                     strokeWidth={Math.max(thick + 14, 24)}
                     lineCap="square"
@@ -1109,10 +1177,11 @@ function EndHandle({ x, y, onDrag, allWalls }: {
       draggable
       onDragStart={() => {
         pushHistory()
+        const connectionTolerance = 8
         dragConnections.current = allWalls.flatMap((w) => {
           const connected: ConnectedWallEndpoint[] = []
-          if (Math.hypot(w.start.x - x, w.start.y - y) <= 1) connected.push({ wallId: w.id, endpoint: 'start' })
-          if (Math.hypot(w.end.x - x, w.end.y - y) <= 1) connected.push({ wallId: w.id, endpoint: 'end' })
+          if (Math.hypot(w.start.x - x, w.start.y - y) <= connectionTolerance) connected.push({ wallId: w.id, endpoint: 'start' })
+          if (Math.hypot(w.end.x - x, w.end.y - y) <= connectionTolerance) connected.push({ wallId: w.id, endpoint: 'end' })
           return connected
         })
       }}
@@ -1129,14 +1198,16 @@ function EndHandle({ x, y, onDrag, allWalls }: {
 
 // ─── Furniture shape ──────────────────────────────────────────────────────────
 
-function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }: {
+function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText, onStairContextMenu }: {
   obj: PlacedObject; selected: boolean; tool: Tool
   onSelect: () => void
   onChange: (u: Partial<PlacedObject>) => void
   onEditText?: () => void
+  onStairContextMenu?: (event: Konva.KonvaEventObject<PointerEvent>) => void
 }) {
   type ResizeCorner = 'nw' | 'ne' | 'sw' | 'se'
   type ResizeHandle = [ResizeCorner, number, number, number, number]
+  type ResizeSide = 'left' | 'right' | 'top' | 'bottom'
   const pushHistory = useFloorPlanStore(s => s.pushHistory)
   const resizeStart = useRef<{
     x: number
@@ -1144,18 +1215,33 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
     width: number
     height: number
     rotation: number
+    leftRunWidth: number
+    rightRunWidth: number
+    landingWidth: number
   } | null>(null)
   const minSize = 20
+  const getReturnDimensions = () => {
+    const legacyLandingWidth = Math.min(obj.width * 0.34, Math.max(34, obj.landing_width ?? 80))
+    const landingWidth = obj.landing_width ?? obj.landingWidth ?? legacyLandingWidth
+    const legacyRunWidth = Math.max(12, obj.width - landingWidth)
+    return {
+      landingWidth,
+      leftRunWidth: obj.left_run_width ?? obj.leftRunWidth ?? legacyRunWidth,
+      rightRunWidth: obj.right_run_width ?? obj.rightRunWidth ?? legacyRunWidth,
+    }
+  }
 
   const handleResizeStart = (e: Konva.KonvaEventObject<DragEvent>) => {
     stopKonvaBubble(e)
     pushHistory()
+    const returnDimensions = getReturnDimensions()
     resizeStart.current = {
       x: obj.x,
       y: obj.y,
       width: obj.width,
       height: obj.height,
       rotation: obj.rotation,
+      ...returnDimensions,
     }
   }
 
@@ -1213,15 +1299,76 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
     resizeStart.current = null
   }
 
+  const getResizeLocalPointer = (
+    e: Konva.KonvaEventObject<DragEvent>,
+    start: NonNullable<typeof resizeStart.current>,
+  ) => {
+    const world = pointerWorldPosition(e.target.getStage()!)
+    if (!world) return null
+    const dx = world.x - start.x
+    const dy = world.y - start.y
+    const rotation = (start.rotation * Math.PI) / 180
+    return {
+      x: dx * Math.cos(rotation) + dy * Math.sin(rotation),
+      y: -dx * Math.sin(rotation) + dy * Math.cos(rotation),
+    }
+  }
+
+  const handleSideResize = (side: ResizeSide) => (e: Konva.KonvaEventObject<DragEvent>) => {
+    stopKonvaBubble(e)
+    const start = resizeStart.current
+    if (!start) return
+
+    const pointer = getResizeLocalPointer(e, start)
+    if (!pointer) return
+    const horizontal = side === 'left' || side === 'right'
+    const dragged = horizontal ? pointer.x : pointer.y
+    const fixedEdge = side === 'left'
+      ? start.width / 2
+      : side === 'right'
+        ? -start.width / 2
+        : side === 'top'
+          ? start.height / 2
+          : -start.height / 2
+    const rawSize = side === 'left' || side === 'top'
+      ? fixedEdge - dragged
+      : dragged - fixedEdge
+    const nextSize = Math.max(minSize, rawSize)
+    const sign = side === 'right' || side === 'bottom' ? 1 : -1
+    const resizedEdge = fixedEdge + nextSize * sign
+    const localCenterShift = (fixedEdge + resizedEdge) / 2
+    const rotation = (start.rotation * Math.PI) / 180
+    const localShiftX = horizontal ? localCenterShift : 0
+    const localShiftY = horizontal ? 0 : localCenterShift
+    const worldShiftX = localShiftX * Math.cos(rotation) - localShiftY * Math.sin(rotation)
+    const worldShiftY = localShiftX * Math.sin(rotation) + localShiftY * Math.cos(rotation)
+
+    onChange({
+      x: start.x + worldShiftX,
+      y: start.y + worldShiftY,
+      ...(horizontal ? { width: nextSize } : { height: nextSize }),
+    })
+
+    if (horizontal) {
+      e.target.x(sign * nextSize / 2)
+      e.target.y(0)
+    } else {
+      e.target.x(0)
+      e.target.y(sign * nextSize / 2)
+    }
+  }
+
   const handleLandingFlightResizeStart = (e: Konva.KonvaEventObject<DragEvent>) => {
     stopKonvaBubble(e)
     pushHistory()
+    const returnDimensions = getReturnDimensions()
     resizeStart.current = {
       x: obj.x,
       y: obj.y,
       width: obj.width,
       height: obj.height,
       rotation: obj.rotation,
+      ...returnDimensions,
     }
   }
 
@@ -1250,9 +1397,47 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
     const start = resizeStart.current
     if (!start) return
 
+    const pointer = getResizeLocalPointer(e, start)
+    if (!pointer) return
     const runHeight = Math.max(22, obj.landing_depth ?? 80)
-    const middleLength = Math.max(10, e.target.y() * 2)
+    const middleLength = Math.max(10, Math.abs(pointer.y) * 2)
     onChange({ height: runHeight * 2 + middleLength })
+  }
+
+  const handleReturnRunLengthResize = (
+    run: 'left' | 'right',
+  ) => (e: Konva.KonvaEventObject<DragEvent>) => {
+    stopKonvaBubble(e)
+    const start = resizeStart.current
+    if (!start) return
+
+    const pointer = getResizeLocalPointer(e, start)
+    if (!pointer) return
+    const mirrored = obj.landing_turn === 'right'
+    const fixedLandingEdge = mirrored ? -start.width / 2 : start.width / 2
+    const landingJoin = mirrored
+      ? fixedLandingEdge + start.landingWidth
+      : fixedLandingEdge - start.landingWidth
+    const nextRunWidth = Math.max(
+      12,
+      mirrored ? pointer.x - landingJoin : landingJoin - pointer.x,
+    )
+    const nextLeftRunWidth = run === 'left' ? nextRunWidth : start.leftRunWidth
+    const nextRightRunWidth = run === 'right' ? nextRunWidth : start.rightRunWidth
+    const nextWidth = start.landingWidth + Math.max(nextLeftRunWidth, nextRightRunWidth)
+    const localCenterShift = mirrored
+      ? (nextWidth - start.width) / 2
+      : -(nextWidth - start.width) / 2
+    const rotation = (start.rotation * Math.PI) / 180
+
+    onChange({
+      x: start.x + localCenterShift * Math.cos(rotation),
+      y: start.y + localCenterShift * Math.sin(rotation),
+      width: nextWidth,
+      left_run_width: nextLeftRunWidth,
+      right_run_width: nextRightRunWidth,
+      landing_width: start.landingWidth,
+    })
   }
 
   const renderSymbol = () => {
@@ -1372,40 +1557,45 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
         )
       }
       if (obj.stair_shape === 'return_landing') {
-        const landingW = Math.min(w * 0.34, Math.max(34, obj.landing_width ?? 80))
+        const legacyLandingW = Math.min(w * 0.34, Math.max(34, obj.landing_width ?? 80))
+        const landingW = obj.landing_width ?? obj.landingWidth ?? legacyLandingW
+        const legacyRunW = Math.max(12, w - landingW)
+        const leftRunW = obj.left_run_width ?? obj.leftRunWidth ?? legacyRunW
+        const rightRunW = obj.right_run_width ?? obj.rightRunWidth ?? legacyRunW
         const runH = Math.min(Math.max(22, obj.landing_depth ?? 80), Math.max(22, (h - 10) / 2))
-        const runW = Math.max(32, w - landingW)
         const lowerY = h / 2 - runH
         const upperY = -h / 2
         const mirrored = obj.landing_turn === 'right'
         const landingX = mirrored ? -w / 2 : w / 2 - landingW
-        const runX = mirrored ? -w / 2 + landingW : -w / 2
-        const runRailX = mirrored ? w / 2 - inset : -w / 2 + inset
+        const landingJoinX = mirrored ? landingX + landingW : landingX
+        const lowerRunX = mirrored ? landingJoinX : landingJoinX - leftRunW
+        const upperRunX = mirrored ? landingJoinX : landingJoinX - rightRunW
+        const lowerRailX = mirrored ? lowerRunX + leftRunW - inset : lowerRunX + inset
+        const upperRailX = mirrored ? upperRunX + rightRunW - inset : upperRunX + inset
         const landingRailX = mirrored ? -w / 2 + inset : w / 2 - inset
-        const arrowEdgeX = mirrored ? w / 2 - inset - 4 : -w / 2 + inset + 4
+        const lowerArrowEdgeX = mirrored ? lowerRunX + leftRunW - inset - 4 : lowerRunX + inset + 4
+        const upperArrowEdgeX = mirrored ? upperRunX + rightRunW - inset - 4 : upperRunX + inset + 4
         const landingCenterX = landingX + landingW / 2
         const firstSteps = Math.max(4, Math.floor(treadCount / 2))
         const secondSteps = Math.max(4, treadCount - firstSteps)
         return (
           <>
-            <Rect x={runX} y={lowerY} width={runW} height={runH} fill={stairFill} stroke="#d6dde5" strokeWidth={1} cornerRadius={3} />
+            <Rect x={lowerRunX} y={lowerY} width={leftRunW} height={runH} fill={stairFill} stroke="#d6dde5" strokeWidth={1} cornerRadius={3} />
             <Rect x={landingX} y={upperY} width={landingW} height={h} fill={landingFill} stroke="#d6dde5" strokeWidth={1} cornerRadius={3} />
-            <Rect x={runX} y={upperY} width={runW} height={runH} fill={stairFill} stroke="#d6dde5" strokeWidth={1} cornerRadius={3} />
-            <Line points={[runRailX, lowerY + 5, runRailX, lowerY + runH - 5]} stroke={railStroke} strokeWidth={detailWidth + 0.4} lineCap="round" />
-            <Line points={[runRailX, upperY + 5, runRailX, upperY + runH - 5]} stroke={railStroke} strokeWidth={detailWidth + 0.4} lineCap="round" />
+            <Rect x={upperRunX} y={upperY} width={rightRunW} height={runH} fill={stairFill} stroke="#d6dde5" strokeWidth={1} cornerRadius={3} />
+            <Line points={[lowerRailX, lowerY + 5, lowerRailX, lowerY + runH - 5]} stroke={railStroke} strokeWidth={detailWidth + 0.4} lineCap="round" />
+            <Line points={[upperRailX, upperY + 5, upperRailX, upperY + runH - 5]} stroke={railStroke} strokeWidth={detailWidth + 0.4} lineCap="round" />
             <Line points={[landingRailX, upperY + 5, landingRailX, h / 2 - 5]} stroke={railStroke} strokeWidth={detailWidth + 0.4} lineCap="round" />
             {Array.from({ length: firstSteps + 1 }).map((_, i) => {
-              const x = runX + inset + ((runW - inset * 2) / firstSteps) * i
+              const x = lowerRunX + inset + ((leftRunW - inset * 2) / firstSteps) * i
               return <Line key={`return-first-${i}`} points={[x, lowerY + 6, x, lowerY + runH - 6]} stroke={treadStroke} strokeWidth={0.85} opacity={0.72} />
             })}
             {Array.from({ length: secondSteps + 1 }).map((_, i) => {
-              const x = mirrored
-                ? runX + inset + ((runW - inset * 2) / secondSteps) * i
-                : landingX - inset - ((runW - inset * 2) / secondSteps) * i
+              const x = upperRunX + inset + ((rightRunW - inset * 2) / secondSteps) * i
               return <Line key={`return-second-${i}`} points={[x, upperY + 6, x, upperY + runH - 6]} stroke={treadStroke} strokeWidth={0.85} opacity={0.72} />
             })}
             <Arrow
-              points={[arrowEdgeX, lowerY + runH / 2, landingCenterX, lowerY + runH / 2, landingCenterX, upperY + runH / 2, arrowEdgeX, upperY + runH / 2]}
+              points={[lowerArrowEdgeX, lowerY + runH / 2, landingCenterX, lowerY + runH / 2, landingCenterX, upperY + runH / 2, upperArrowEdgeX, upperY + runH / 2]}
               stroke={arrowStroke}
               fill={arrowStroke}
               strokeWidth={1.4}
@@ -1506,7 +1696,7 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
             width={Math.max(10, w - 16)}
             height={Math.max(10, h - 14)}
             text={obj.label}
-            fontSize={getTextboxFontSize(w, h)}
+            fontSize={obj.font_size ?? getTextboxFontSize(w, h)}
             fill={sketch}
             align="left"
             verticalAlign="middle"
@@ -1538,6 +1728,7 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
       ['se', obj.width / 2, obj.height / 2, 0, 0],
     ]
 
+    if (obj.type === 'stairs' && obj.stair_shape === 'return_landing') return []
     if (obj.type !== 'stairs' || obj.stair_shape !== 'landing') return baseHandles
 
     const w = obj.width
@@ -1573,6 +1764,12 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
       x={obj.x} y={obj.y} rotation={obj.rotation}
       draggable={tool === 'select'}
       onClick={onSelect} onTap={onSelect}
+      onContextMenu={(event) => {
+        if (obj.type !== 'stairs') return
+        event.evt.preventDefault()
+        event.cancelBubble = true
+        onStairContextMenu?.(event)
+      }}
       onDblClick={(e) => {
         if (obj.type !== 'text') return
         stopKonvaBubble(e)
@@ -1609,9 +1806,28 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
               onDragEnd={handleResizeEnd}
             />
           ))}
+          {obj.type === 'stairs' && obj.stair_shape === 'return_landing' && ([
+            ['top', 0, -obj.height / 2],
+            ['bottom', 0, obj.height / 2],
+          ] as Array<[ResizeSide, number, number]>).map(([side, x, y]) => (
+            <Circle
+              key={`side-${side}`}
+              x={x}
+              y={y}
+              radius={5}
+              fill="#f59e0b"
+              stroke="#fff"
+              strokeWidth={1}
+              draggable
+              onMouseDown={stopKonvaBubble}
+              onDragStart={handleResizeStart}
+              onDragMove={handleSideResize(side)}
+              onDragEnd={handleResizeEnd}
+            />
+          ))}
           <Circle
             x={0} y={-obj.height / 2 - 14}
-            radius={6} fill="#4f6ef7" stroke="#fff" strokeWidth={1}
+            radius={8} fill="#4f6ef7" stroke="#fff" strokeWidth={1.5}
             draggable
             onMouseDown={stopKonvaBubble}
             onDragStart={(e) => {
@@ -1633,6 +1849,7 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
               e.target.x(0); e.target.y(-obj.height / 2 - 14)
             }}
           />
+          <RotateHandleIcon x={0} y={-obj.height / 2 - 14} rotation={-obj.rotation} />
           {obj.type === 'stairs' && obj.stair_shape === 'landing' && (() => {
             const landingW = Math.min(obj.width * 0.42, Math.max(34, obj.landing_width ?? 80))
             const landingX = obj.landing_turn === 'right' ? -obj.width / 2 : obj.width / 2 - landingW
@@ -1660,9 +1877,10 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
             )
           })()}
           {obj.type === 'stairs' && obj.stair_shape === 'return_landing' && (() => {
-            const landingW = Math.min(obj.width * 0.34, Math.max(34, obj.landing_width ?? 80))
+            const legacyLandingW = Math.min(obj.width * 0.34, Math.max(34, obj.landing_width ?? 80))
+            const landingW = obj.landing_width ?? obj.landingWidth ?? legacyLandingW
             const runH = Math.min(Math.max(22, obj.landing_depth ?? 80), Math.max(22, (obj.height - 10) / 2))
-            const landingX = obj.width / 2 - landingW
+            const landingX = obj.landing_turn === 'right' ? -obj.width / 2 : obj.width / 2 - landingW
             const handleX = landingX + landingW / 2
             const handleY = obj.height / 2 - runH
             return (
@@ -1685,6 +1903,53 @@ function FurnitureShape({ obj, selected, tool, onSelect, onChange, onEditText }:
               />
             )
           })()}
+          {obj.type === 'stairs' && obj.stair_shape === 'return_landing' && (() => {
+            const runH = Math.min(Math.max(22, obj.landing_depth ?? 80), Math.max(22, (obj.height - 10) / 2))
+            const mirrored = obj.landing_turn === 'right'
+            const legacyLandingW = Math.min(obj.width * 0.34, Math.max(34, obj.landing_width ?? 80))
+            const landingW = obj.landing_width ?? obj.landingWidth ?? legacyLandingW
+            const legacyRunW = Math.max(12, obj.width - landingW)
+            const leftRunWidth = obj.left_run_width ?? obj.leftRunWidth ?? legacyRunW
+            const rightRunWidth = obj.right_run_width ?? obj.rightRunWidth ?? legacyRunW
+            const landingJoinX = mirrored
+              ? -obj.width / 2 + landingW
+              : obj.width / 2 - landingW
+            const upperY = -obj.height / 2 + runH / 2
+            const lowerY = obj.height / 2 - runH / 2
+            const handles: Array<{ run: 'left' | 'right'; x: number; y: number }> = [
+              {
+                run: 'right',
+                x: mirrored ? landingJoinX + rightRunWidth : landingJoinX - rightRunWidth,
+                y: upperY,
+              },
+              {
+                run: 'left',
+                x: mirrored ? landingJoinX + leftRunWidth : landingJoinX - leftRunWidth,
+                y: lowerY,
+              },
+            ]
+
+            return handles.map(({ run, x: handleX, y: handleY }) => (
+              <Circle
+                key={`return-run-length-${run}`}
+                x={handleX}
+                y={handleY}
+                radius={6}
+                fill="#2563eb"
+                stroke="#fff"
+                strokeWidth={1.5}
+                draggable
+                onMouseDown={stopKonvaBubble}
+                onDragStart={handleLandingFlightResizeStart}
+                onDragMove={handleReturnRunLengthResize(run)}
+                onDragEnd={(e) => {
+                  handleLandingFlightResizeEnd(e)
+                  e.target.x(handleX)
+                  e.target.y(handleY)
+                }}
+              />
+            ))
+          })()}
         </>
       )}
     </Group>
@@ -1703,7 +1968,7 @@ type CanvasExportDetail = {
 
 export default function Canvas2D({ stageWidth, stageHeight }: Props) {
   const store = useFloorPlanStore()
-  const { walls, openings, objects, activeTool, selectedId, grid_size, measurementUnit, wallMeasurementMode } = store
+  const { walls, openings, objects, activeTool, buildPreset, selectedId, grid_size, measurementUnit, wallMeasurementMode } = store
 
   const stageRef = useRef<Konva.Stage>(null)
   const [drawStart, setDrawStart] = useState<{ x: number; y: number } | null>(null)
@@ -1716,6 +1981,13 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
   const [isDraggingStage, setIsDraggingStage] = useState(false)
   const [editingTextId, setEditingTextId] = useState<string | null>(null)
   const [editingTextValue, setEditingTextValue] = useState('')
+  const [stairContextMenu, setStairContextMenu] = useState<{
+    objectId: string
+    x: number
+    y: number
+    planX: number
+    planY: number
+  } | null>(null)
   const [scrollbarDrag, setScrollbarDrag] = useState<{
     axis: 'x' | 'y'
     startClient: number
@@ -1813,6 +2085,21 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
       const key = e.key.toLowerCase()
 
       if (e.key === 'Escape') { store.setTool('select'); setDrawStart(null); setDrawCurrent(null); setStairStart(null); setStairCurrent(null) }
+      if (selectedId && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+        const selectedObject = objects.find(object => object.id === selectedId)
+        if (selectedObject) {
+          e.preventDefault()
+          if (!e.repeat) store.pushHistory()
+          const distance = e.shiftKey ? 10 : 1
+          const deltaX = e.key === 'ArrowLeft' ? -distance : e.key === 'ArrowRight' ? distance : 0
+          const deltaY = e.key === 'ArrowUp' ? -distance : e.key === 'ArrowDown' ? distance : 0
+          store.updateObject(selectedObject.id, {
+            x: selectedObject.x + deltaX,
+            y: selectedObject.y + deltaY,
+          })
+          return
+        }
+      }
       if ((e.key === 'Delete' || e.key === 'Backspace') && selectedId) {
         if (walls.find(w => w.id === selectedId)) store.removeWall(selectedId)
         else if (openings.find(o => o.id === selectedId)) store.removeOpening(selectedId)
@@ -1852,7 +2139,7 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
       window.removeEventListener('keyup', keyupHandler)
       window.removeEventListener('blur', restoreSpacePanTool)
     }
-  }, [selectedId, walls, openings, store])
+  }, [selectedId, walls, openings, objects, store])
 
   const getStagePointer = () => {
     const stage = stageRef.current!
@@ -1969,8 +2256,11 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
           store.addWall({
             start: drawStart,
             end: mergedEnd,
-            thickness: 10,
-            height: 2.8,
+            thickness: buildPreset?.includes('half-wall') ? 14 : buildPreset?.includes('foundation') ? 18 : 10,
+            height: buildPreset?.includes('half-wall') ? 1.1 : buildPreset?.includes('pony') ? 1.5 : 2.8,
+            wall_type: buildPreset ?? 'straight-exterior-wall',
+            curved: buildPreset?.includes('curved') ?? false,
+            color: buildPreset?.includes('glass') ? '#8fd3e8' : undefined,
           })
         }
 
@@ -1985,24 +2275,57 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
       if (hit) {
         const isGate = activeTool === 'gate'
         const isDoor = activeTool === 'door' || activeTool === 'doubleDoor' || isGate
+        const doorStyle = buildPreset === 'doorway'
+          ? 'opening'
+          : buildPreset === 'sliding-door'
+            ? 'sliding'
+            : buildPreset === 'pocket-door'
+              ? 'pocket'
+              : buildPreset === 'bifold-door'
+                ? 'bifold'
+                : buildPreset === 'garage-door'
+                  ? 'garage'
+                  : buildPreset === 'fixed-door'
+                    ? 'fixed'
+                    : buildPreset === 'barn-door'
+                      ? 'barn'
+                      : buildPreset === 'shower-door'
+                        ? 'shower'
+                        : activeTool === 'doubleDoor' || isGate
+                          ? 'double'
+                          : 'hinged'
+        const windowStyle = buildPreset === 'bay-window'
+          ? 'bay'
+          : buildPreset === 'bow-window'
+            ? 'bow'
+            : buildPreset === 'box-window'
+              ? 'garden'
+              : buildPreset === 'pass-through'
+                ? 'picture'
+                : buildPreset === 'wall-niche'
+                  ? 'fixed'
+                  : 'double_hung'
         store.addOpening({
           wall_id: hit.wall.id,
           type: isGate ? 'gate' : isDoor ? 'door' : 'window',
           offset: hit.offset,
-          width: activeTool === 'doubleDoor' ? 100 : activeTool === 'gate' ? 90 : activeTool === 'door' ? 40: 20,
+          width: buildPreset === 'garage-door' ? 140 : activeTool === 'doubleDoor' ? 100 : activeTool === 'gate' ? 90 : activeTool === 'door' ? 40 : buildPreset === 'bay-window' || buildPreset === 'bow-window' ? 70 : 40,
           swing: 'left',
           height: isDoor ? 2.1 : undefined,
           elevation: isDoor ? 0 : undefined,
           trim: isDoor ? 0.08 : undefined,
-          door_style: activeTool === 'doubleDoor' || activeTool === 'gate' ? 'double' : activeTool === 'door' ? 'hinged' : undefined,
+          door_style: isDoor ? doorStyle : undefined,
           mount: isDoor ? 'center' : undefined,
           swing_direction: isDoor ? 'in' : undefined,
           swing_angle: isDoor ? 90 : undefined,
           handle_style: isDoor ? 'knob' : undefined,
           frame_color: isDoor ? '#111827' : undefined,
           panel_color: isDoor ? '#ffffff' : undefined,
+          window_style: !isDoor ? windowStyle : undefined,
+          build_variant: buildPreset ?? undefined,
         })
         store.setTool('select')
+        store.setBuildPreset(null)
         setDoorPreview(null)
       }
     }
@@ -2032,14 +2355,20 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
             height: 80,
             rotation: Math.atan2(snapped.y - stairStart.y, snapped.x - stairStart.x) * 180 / Math.PI,
             color: '#8f969c',
-            stair_shape: 'straight',
+            stair_shape: buildPreset === 'l-shaped-stair'
+              ? 'landing'
+              : buildPreset === 'u-shaped-stair'
+                ? 'return_landing'
+                : 'straight',
             stair_height: 2.8,
             stair_steps: 12,
+            build_variant: buildPreset ?? 'draw-stairs',
           })
         }
         setStairStart(null)
         setStairCurrent(null)
         store.setTool('select')
+        store.setBuildPreset(null)
       }
     }
   }
@@ -2181,6 +2510,166 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
 
   const showGrid = false
 
+  useEffect(() => {
+    if (!stairContextMenu) return
+    const close = () => setStairContextMenu(null)
+    window.addEventListener('pointerdown', close)
+    window.addEventListener('blur', close)
+    return () => {
+      window.removeEventListener('pointerdown', close)
+      window.removeEventListener('blur', close)
+    }
+  }, [stairContextMenu])
+
+  const changeStairType = (
+    stairShape: NonNullable<PlacedObject['stair_shape']>,
+    landingTurn?: NonNullable<PlacedObject['landing_turn']>,
+  ) => {
+    if (!stairContextMenu) return
+    const stair = objects.find(object => object.id === stairContextMenu.objectId)
+    const legacyLandingWidth = stair
+      ? Math.min(stair.width * 0.34, Math.max(34, stair.landing_width ?? 80))
+      : 80
+    const legacyRunWidth = stair ? Math.max(12, stair.width - legacyLandingWidth) : 80
+    store.pushHistory()
+    store.updateObject(stairContextMenu.objectId, {
+      stair_shape: stairShape,
+      ...(landingTurn ? { landing_turn: landingTurn } : {}),
+      ...(stairShape === 'straight'
+        ? {}
+        : {
+          landing_width: objects.find(object => object.id === stairContextMenu.objectId)?.landing_width ?? 80,
+          landing_depth: objects.find(object => object.id === stairContextMenu.objectId)?.landing_depth ?? 80,
+          ...(stairShape === 'return_landing'
+            ? {
+              landing_width: stair?.landing_width ?? stair?.landingWidth ?? legacyLandingWidth,
+              left_run_width: stair?.left_run_width ?? stair?.leftRunWidth ?? legacyRunWidth,
+              right_run_width: stair?.right_run_width ?? stair?.rightRunWidth ?? legacyRunWidth,
+            }
+            : {}),
+        }),
+    })
+    store.setSelected(stairContextMenu.objectId)
+    setStairContextMenu(null)
+  }
+
+  const getConnectedStairLanding = (stair: PlacedObject): {
+    other: PlacedObject
+    firstEnd: { sign: -1 | 1; x: number; y: number }
+    secondEnd: { sign: -1 | 1; x: number; y: number }
+    distance: number
+  } | null => {
+    const stairAngle = (stair.rotation * Math.PI) / 180
+    const stairEnds = ([-1, 1] as const).map(sign => ({
+      sign,
+      x: stair.x + Math.cos(stairAngle) * stair.width / 2 * sign,
+      y: stair.y + Math.sin(stairAngle) * stair.width / 2 * sign,
+    }))
+    const contextAlong = stairContextMenu
+      ? (stairContextMenu.planX - stair.x) * Math.cos(stairAngle)
+        + (stairContextMenu.planY - stair.y) * Math.sin(stairAngle)
+      : stair.width / 2
+    const preferredEnd = stairEnds.reduce((closest, end) => (
+      Math.abs(contextAlong - end.sign * stair.width / 2)
+        < Math.abs(contextAlong - closest.sign * stair.width / 2)
+        ? end
+        : closest
+    ))
+
+    let best: {
+      other: PlacedObject
+      firstEnd: (typeof stairEnds)[number]
+      secondEnd: { sign: -1 | 1; x: number; y: number }
+      distance: number
+    } | null = null
+
+    objects.forEach(other => {
+      if (other.id === stair.id || other.type !== 'stairs' || (other.stair_shape ?? 'straight') !== 'straight') return
+      const angleDifference = Math.abs((((other.rotation - stair.rotation) % 180) + 180) % 180)
+      const parallelDifference = Math.min(angleDifference, 180 - angleDifference)
+      if (parallelDifference > 12) return
+
+      const otherAngle = (other.rotation * Math.PI) / 180
+      const otherEnds = ([-1, 1] as const).map(sign => ({
+        sign,
+        x: other.x + Math.cos(otherAngle) * other.width / 2 * sign,
+        y: other.y + Math.sin(otherAngle) * other.width / 2 * sign,
+      }))
+
+      otherEnds.forEach(secondEnd => {
+        const distance = Math.hypot(secondEnd.x - preferredEnd.x, secondEnd.y - preferredEnd.y)
+        const maximumConnectionDistance = Math.max(320, stair.height + other.height + 160)
+        if (distance > maximumConnectionDistance || (best && distance >= best.distance)) return
+        best = { other, firstEnd: preferredEnd, secondEnd, distance }
+      })
+    })
+
+    return best as {
+      other: PlacedObject
+      firstEnd: { sign: -1 | 1; x: number; y: number }
+      secondEnd: { sign: -1 | 1; x: number; y: number }
+      distance: number
+    } | null
+  }
+
+  const addLandingBetweenStairs = () => {
+    if (!stairContextMenu) return
+    const stair = objects.find(object => object.id === stairContextMenu.objectId)
+    if (!stair) return
+    const connection = getConnectedStairLanding(stair)
+    if (!connection) return
+
+    const { other, firstEnd, secondEnd } = connection
+    const angle = (stair.rotation * Math.PI) / 180
+    const axisX = Math.cos(angle)
+    const axisY = Math.sin(angle)
+    const crossX = -axisY
+    const crossY = axisX
+    const outwardSign = firstEnd.sign
+    const firstEndAlong = firstEnd.x * axisX + firstEnd.y * axisY
+    const secondEndAlong = secondEnd.x * axisX + secondEnd.y * axisY
+    const firstAcross = stair.x * crossX + stair.y * crossY
+    const secondAcross = other.x * crossX + other.y * crossY
+    const connectionAlong = (firstEndAlong + secondEndAlong) / 2
+    const firstShift = connectionAlong - firstEndAlong
+    const secondShift = connectionAlong - secondEndAlong
+    const overlap = 3
+    const landingDepth = Math.max(40, Math.min(120, Math.max(stair.height, other.height)))
+    const minimumAcross = Math.min(firstAcross - stair.height / 2, secondAcross - other.height / 2) - overlap
+    const maximumAcross = Math.max(firstAcross + stair.height / 2, secondAcross + other.height / 2) + overlap
+    const landingWidth = maximumAcross - minimumAcross
+    const landingAcross = (minimumAcross + maximumAcross) / 2
+    const landingAlong = connectionAlong + outwardSign * (landingDepth / 2 - overlap)
+    const landing = {
+      type: 'landing',
+      label: 'Landing',
+      x: axisX * landingAlong + crossX * landingAcross,
+      y: axisY * landingAlong + crossY * landingAcross,
+      width: landingWidth,
+      height: landingDepth,
+      rotation: stair.rotation + 90,
+      color: '#d7b17d',
+      elevation: firstEnd.sign > 0 ? (stair.stair_height ?? 2.8) : 0,
+      build_variant: 'connected-stair-landing',
+    }
+
+    store.pushHistory()
+    store.updateObject(stair.id, {
+      x: stair.x + axisX * firstShift,
+      y: stair.y + axisY * firstShift,
+    })
+    store.updateObject(other.id, {
+      x: other.x + axisX * secondShift,
+      y: other.y + axisY * secondShift,
+      ...(secondEnd.sign === firstEnd.sign
+        ? {}
+        : { rotation: (other.rotation + 180) % 360 }),
+    })
+    const created = store.addObject(landing)
+    store.setSelected(created.id)
+    setStairContextMenu(null)
+  }
+
   const gridLines = () => {
     const lines: React.ReactNode[] = []
     const startX = Math.floor(-stagePos.x / stageScale / grid_size) * grid_size - grid_size * 2
@@ -2290,6 +2779,17 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
               }}
               onChange={u => store.updateObject(obj.id, u)}
               onEditText={() => startTextEdit(obj)}
+              onStairContextMenu={(event) => {
+                const planPoint = pointerWorldPosition(event.target.getStage()!)
+                store.setSelected(obj.id)
+                setStairContextMenu({
+                  objectId: obj.id,
+                  x: event.evt.clientX,
+                  y: event.evt.clientY,
+                  planX: planPoint?.x ?? obj.x,
+                  planY: planPoint?.y ?? obj.y,
+                })
+              }}
             />
           ))}
         </Layer>
@@ -2491,6 +2991,70 @@ export default function Canvas2D({ stageWidth, stageHeight }: Props) {
             }
           }}
         />
+      )}
+
+      {stairContextMenu && (
+        <div
+          className="fixed z-[100] min-w-52 overflow-hidden rounded-lg border border-gray-300 bg-white py-1.5 text-sm text-gray-800 shadow-2xl"
+          style={{ left: stairContextMenu.x, top: stairContextMenu.y }}
+          onPointerDown={(event) => event.stopPropagation()}
+          onContextMenu={(event) => event.preventDefault()}
+        >
+          <div className="border-b border-gray-200 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+            Stair Type
+          </div>
+          {(() => {
+            const stair = objects.find(object => object.id === stairContextMenu.objectId)
+            const canAddLanding = stair
+              && (stair.stair_shape ?? 'straight') === 'straight'
+              && Boolean(getConnectedStairLanding(stair))
+            return (
+              <button
+                type="button"
+                disabled={!canAddLanding}
+                className={`flex w-full items-center gap-2 border-b border-gray-200 px-3 py-2 text-left font-medium transition-colors ${
+                  canAddLanding
+                    ? 'text-amber-700 hover:bg-amber-50'
+                    : 'cursor-not-allowed text-gray-400'
+                }`}
+                onClick={addLandingBetweenStairs}
+              >
+                <span className="h-2 w-2 rounded-full bg-amber-500" />
+                Add landing between stairs
+              </button>
+            )
+          })()}
+          {([
+            ['straight', undefined, 'Straight / Regular'],
+            ['landing', 'left', 'Landing — Left'],
+            ['landing', 'right', 'Landing — Right'],
+            ['return_landing', 'left', 'Opposite Landing — Left'],
+            ['return_landing', 'right', 'Opposite Landing — Right'],
+          ] as Array<[
+            NonNullable<PlacedObject['stair_shape']>,
+            NonNullable<PlacedObject['landing_turn']> | undefined,
+            string,
+          ]>).map(([shape, turn, label]) => {
+            const stair = objects.find(object => object.id === stairContextMenu.objectId)
+            const active = stair?.stair_shape === shape
+              && (shape === 'straight' || (stair.landing_turn ?? 'left') === turn)
+            return (
+              <button
+                key={`${shape}-${turn ?? 'none'}`}
+                type="button"
+                className={`flex w-full items-center gap-2 px-3 py-2 text-left transition-colors ${
+                  active
+                    ? 'bg-blue-600 text-white'
+                    : 'hover:bg-gray-900 hover:text-white'
+                }`}
+                onClick={() => changeStairType(shape, turn)}
+              >
+                <span className={`h-2 w-2 rounded-full ${active ? 'bg-white' : 'bg-gray-400'}`} />
+                {label}
+              </button>
+            )
+          })}
+        </div>
       )}
 
       <div

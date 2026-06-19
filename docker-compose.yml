@@ -42,6 +42,7 @@ services:
       - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:8000
+      - VITE_DEV_API_PROXY=http://backend:8000
     depends_on:
       - backend
     volumes:
